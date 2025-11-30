@@ -3,265 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4Track - Consultas Inteligentes</title>
-
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Fonte Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-    <!-- CSS Customizado -->
+    <title>4Track - Tecnologia precisa para consultas inteligentes</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body class="bg-tech-black text-white font-inter relative">
+<body>
 
-<!-- CANVAS DE FUNDO -->
-<canvas id="data-network" class="fixed inset-0 w-full h-full z-0"></canvas>
+<!-- ============================= -->
+<!-- CANVAS DE FUNDO               -->
+<!-- ============================= -->
+<canvas id="data-network"></canvas>
 
-<!-- HEADER / MENU -->
+<!-- ============================= -->
+<!-- HEADER                         -->
+<!-- ============================= -->
 <header class="glass-header fixed top-0 left-0 w-full z-20 shadow-lg">
     <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <a href="#" class="text-xl font-extrabold tracking-widest" style="color: var(--color-lilac-soft);">4<span class="text-white">Track</span></a>
+        <a href="#" class="text-xl font-extrabold tracking-widest" style="color: #C7A2E8;">
+            4<span class="text-white">Track</span>
+        </a>
 
-        <!-- Menu Desktop -->
         <div class="hidden lg:flex space-x-8 items-center text-sm">
-            <a data-scroll="#inicio" href="#inicio" class="menu-link">Início</a>
-            <a data-scroll="#recursos" href="#recursos" class="menu-link">Recursos</a>
-            <a data-scroll="#consultas" href="#consultas" class="menu-link">Consultas</a>
-            <a data-scroll="#planos" href="#planos" class="menu-link">Planos</a>
-            <a data-scroll="#depoimentos" href="#depoimentos" class="menu-link">Depoimentos</a>
-            <a data-scroll="#suporte" href="#suporte" class="menu-link">Suporte</a>
-            <button id="btn-open-login" class="btn-premium px-5 py-2 rounded-full font-semibold">Entrar / Comprar</button>
+            <a href="#inicio" class="menu-link">Início</a>
+            <a href="#recursos" class="menu-link">Recursos</a>
+            <a href="#depoimentos" class="menu-link">Depoimentos</a>
+            <a href="#planos" class="menu-link">Planos</a>
+            <a href="#suporte" class="menu-link">Suporte</a>
+            <button class="px-5 py-2 rounded-full font-semibold btn-premium btn-open-login">
+                Comprar Acesso
+            </button>
         </div>
 
-        <!-- Menu Mobile -->
-        <button id="mobile-btn" class="lg:hidden text-white focus:outline-none">
+        <button id="mobile-menu-button" class="lg:hidden text-white focus:outline-none">
             <i class="fas fa-bars fa-lg"></i>
         </button>
     </nav>
 
-    <div id="mobile-menu" class="hidden lg:hidden bg-tech-black p-4 border-t border-violet-700/50">
-        <a data-scroll="#inicio" href="#inicio" class="block py-2 border-b border-gray-800 menu-link">Início</a>
-        <a data-scroll="#recursos" href="#recursos" class="block py-2 border-b border-gray-800 menu-link">Recursos</a>
-        <a data-scroll="#consultas" href="#consultas" class="block py-2 border-b border-gray-800 menu-link">Consultas</a>
-        <a data-scroll="#planos" href="#planos" class="block py-2 border-b border-gray-800 menu-link">Planos</a>
-        <a data-scroll="#depoimentos" href="#depoimentos" class="block py-2 border-b border-gray-800 menu-link">Depoimentos</a>
-        <a data-scroll="#suporte" href="#suporte" class="block py-2 border-b border-gray-800 menu-link">Suporte</a>
-        <button id="btn-open-login-mobile" class="w-full mt-4 py-2 rounded-lg font-semibold btn-premium">Entrar / Comprar</button>
+    <div id="mobile-menu" class="hidden lg:hidden bg-black/90 p-4 border-t border-violet-700/50">
+        <a href="#inicio" class="block py-2 menu-link">Início</a>
+        <a href="#recursos" class="block py-2 menu-link">Recursos</a>
+        <a href="#depoimentos" class="block py-2 menu-link">Depoimentos</a>
+        <a href="#planos" class="block py-2 menu-link">Planos</a>
+        <a href="#suporte" class="block py-2 menu-link">Suporte</a>
+        <button class="w-full mt-4 py-2 rounded-lg font-semibold btn-premium btn-open-login">
+            Comprar Acesso
+        </button>
     </div>
 </header>
 
-<!-- HERO -->
-<section id="inicio" class="relative min-h-[85vh] flex items-center justify-center text-center px-4 sm:px-6 lg:px-8 z-10">
-    <div class="max-w-4xl pt-16">
-        <div id="greeting" class="text-sm font-medium mb-4 uppercase tracking-wider" style="color: var(--color-lilac-soft); text-shadow: 0 0 5px rgba(199, 162, 232, 0.3);"></div>
-        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold leading-tight mb-6 tracking-tight text-white">
-            Tecnologia precisa para consultas <span class="bg-clip-text text-transparent" style="background-image: linear-gradient(45deg, var(--color-lilac-soft), white);">inteligentes</span>.
-        </h1>
-        <p class="text-lg sm:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">Liberamos acesso total a consultas avançadas com velocidade, precisão e design futurista.</p>
+<main class="hero-content pt-24">
 
-        <!-- CTA Buttons -->
-        <div class="flex flex-wrap justify-center gap-4">
-            <button id="btn-iniciar-analise" class="btn-premium px-6 py-3 rounded-full font-semibold">Iniciar Análise</button>
-            <button id="btn-comprar-acesso" class="btn-premium px-6 py-3 rounded-full font-semibold">Comprar Acesso</button>
-            <button id="btn-entrar-sistema" class="btn-premium px-6 py-3 rounded-full font-semibold">Entrar no Sistema</button>
-        </div>
-    </div>
-</section>
-
-<!-- RECURSOS -->
-<section id="recursos" class="py-20 relative z-10">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Recursos Principais</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="card-module p-6 rounded-xl">
-                <i class="fas fa-microchip fa-3x mb-4 icon-lilac"></i>
-                <h3 class="font-bold mb-2">Processamento Rápido</h3>
-                <p class="text-gray-300 text-sm">Análises instantâneas com tecnologia de ponta.</p>
+    <!-- ============================= -->
+    <!-- HERO PRINCIPAL                -->
+    <!-- ============================= -->
+    <section id="inicio" class="relative min-h-[85vh] flex items-center justify-center text-center px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl pt-16">
+            <div id="greeting" class="text-sm font-medium mb-4 uppercase tracking-wider text-lilac-soft">
+                <!-- Saudação por JS -->
             </div>
-            <div class="card-module p-6 rounded-xl">
-                <i class="fas fa-shield-alt fa-3x mb-4 icon-lilac"></i>
-                <h3 class="font-bold mb-2">Segurança Total</h3>
-                <p class="text-gray-300 text-sm">Proteção de dados com criptografia avançada.</p>
-            </div>
-            <div class="card-module p-6 rounded-xl">
-                <i class="fas fa-eye fa-3x mb-4 icon-lilac"></i>
-                <h3 class="font-bold mb-2">Monitoramento</h3>
-                <p class="text-gray-300 text-sm">Acompanhe todas as análises em tempo real.</p>
-            </div>
-            <div class="card-module p-6 rounded-xl">
-                <i class="fas fa-user-cog fa-3x mb-4 icon-lilac"></i>
-                <h3 class="font-bold mb-2">Personalização</h3>
-                <p class="text-gray-300 text-sm">Configure os parâmetros de consulta ao seu gosto.</p>
+            <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold leading-tight mb-6 tracking-tight text-white">
+                Tecnologia precisa para consultas <span class="bg-clip-text text-transparent" style="background-image: linear-gradient(45deg, #C7A2E8, white);">inteligentes</span>.
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                Liberamos acesso total a consultas avançadas com velocidade, precisão e design futurista.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <button class="px-8 py-3 rounded-full font-bold btn-premium btn-open-login">
+                    <i class="fas fa-rocket mr-2"></i> Comprar Acesso
+                </button>
+                <button class="px-8 py-3 rounded-full font-bold text-white border-2 border-violet-700 hover:border-violet-500 transition duration-300 bg-transparent btn-open-login">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Entrar no Sistema
+                </button>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- CONSULTAS -->
-<section id="consultas" class="py-20 relative z-10">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl font-bold mb-12 text-white">Módulos de Inteligência Analítica</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- ============================= -->
+    <!-- CONSULTAS / RECURSOS          -->
+    <!-- ============================= -->
+    <section id="recursos" class="py-20 px-4 sm:px-6 lg:px-8 container mx-auto">
+        <h2 class="text-4xl font-bold text-center mb-12 text-white">
+            Módulos de Inteligência Analítica
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div class="card-module rounded-xl p-6 text-center">
-                <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
-                    <i class="fas fa-id-card"></i>
-                </div>
+                <div class="icon-lilac"><i class="fas fa-id-card"></i></div>
                 <h3 class="text-xl font-semibold mb-2 text-white">Consulta CPF</h3>
                 <p class="text-gray-400 text-sm">Auditoria completa de pessoa física, traçando histórico e conexões com precisão.</p>
             </div>
-
             <div class="card-module rounded-xl p-6 text-center">
-                <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
-                    <i class="fas fa-user-tag"></i>
-                </div>
+                <div class="icon-lilac"><i class="fas fa-user-tag"></i></div>
                 <h3 class="text-xl font-semibold mb-2 text-white">Consulta Nome</h3>
                 <p class="text-gray-400 text-sm">Mapeamento de homônimos e referências digitais com análise de big data.</p>
             </div>
-
             <div class="card-module rounded-xl p-6 text-center">
-                <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
-                    <i class="fas fa-phone-alt"></i>
-                </div>
+                <div class="icon-lilac"><i class="fas fa-phone-alt"></i></div>
                 <h3 class="text-xl font-semibold mb-2 text-white">Consulta Telefone</h3>
                 <p class="text-gray-400 text-sm">Verificação de portabilidade, histórico de uso e vínculos cadastrais.</p>
             </div>
-
             <div class="card-module rounded-xl p-6 text-center">
-                <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
-                    <i class="fas fa-at"></i>
-                </div>
+                <div class="icon-lilac"><i class="fas fa-at"></i></div>
                 <h3 class="text-xl font-semibold mb-2 text-white">Consulta Email</h3>
                 <p class="text-gray-400 text-sm">Análise de risco, validação de contas e rastreamento de atividade online.</p>
             </div>
-
             <div class="card-module rounded-xl p-6 text-center">
-                <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
-                    <i class="fas fa-map-marker-alt"></i>
-                </div>
+                <div class="icon-lilac"><i class="fas fa-map-marker-alt"></i></div>
                 <h3 class="text-xl font-semibold mb-2 text-white">Consulta Endereço</h3>
                 <p class="text-gray-400 text-sm">Confirmação geográfica e histórico de residências com alta fidelidade.</p>
             </div>
-
             <div class="card-module rounded-xl p-6 text-center relative border-dashed border-violet-700/50">
-                <span class="absolute top-2 right-2 text-xs font-medium px-2 py-1 rounded-full bg-violet-700/50 text-white">Integrando</span>
-                <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl opacity-60">
-                    <i class="fas fa-car-side"></i>
-                </div>
+                <span class="absolute top-2 right-2 text-xs font-medium px-2 py-1 rounded-full bg-violet-700/50 text-white">
+                    Integrando
+                </span>
+                <div class="icon-lilac opacity-60"><i class="fas fa-car-side"></i></div>
                 <h3 class="text-xl font-semibold mb-2 text-gray-500">Consulta Veicular</h3>
                 <p class="text-gray-600 text-sm">Módulo em integração. Disponível em breve para análise de propriedade e histórico veicular.</p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- PLANOS -->
-<section id="planos" class="py-20 relative z-10 bg-[rgba(12,12,30,0.85)]">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Escolha seu Plano</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="card-module p-6 rounded-2xl border border-violet-700/40">
-                <h3 class="text-xl font-bold mb-4">Diário</h3>
-                <p class="text-gray-300 mb-6">Acesso por 1 dia</p>
-                <span class="text-3xl font-extrabold mb-4 block">R$10</span>
-                <button class="btn-premium px-5 py-2 rounded-full font-semibold w-full open-login">Selecionar</button>
-            </div>
-            <div class="card-module p-6 rounded-2xl border border-violet-700/40">
-                <h3 class="text-xl font-bold mb-4">Semanal</h3>
-                <p class="text-gray-300 mb-6">Acesso por 7 dias</p>
-                <span class="text-3xl font-extrabold mb-4 block">R$25</span>
-                <button class="btn-premium px-5 py-2 rounded-full font-semibold w-full open-login">Selecionar</button>
-            </div>
-            <div class="card-module p-6 rounded-2xl border border-violet-700/40">
-                <h3 class="text-xl font-bold mb-4">Quinzenal</h3>
-                <p class="text-gray-300 mb-6">Acesso por 15 dias</p>
-                <span class="text-3xl font-extrabold mb-4 block">R$50</span>
-                <button class="btn-premium px-5 py-2 rounded-full font-semibold w-full open-login">Selecionar</button>
-            </div>
-            <div class="card-module p-6 rounded-2xl border border-violet-700/40">
-                <h3 class="text-xl font-bold mb-4">Mensal</h3>
-                <p class="text-gray-300 mb-6">Acesso completo 30 dias</p>
-                <span class="text-3xl font-extrabold mb-4 block">R$100</span>
-                <button class="btn-premium px-5 py-2 rounded-full font-semibold w-full open-login">Selecionar</button>
-            </div>
+    <!-- ============================= -->
+    <!-- PLANOS                        -->
+    <!-- ============================= -->
+    <section id="planos" class="py-20 px-4 sm:px-6 lg:px-8 container mx-auto">
+        <h2 class="text-4xl font-bold text-center mb-12 text-white">
+            Planos de Acesso
+        </h2>
+        <div id="planos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Os planos serão exibidos via JS ao clicar em Comprar Acesso -->
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- DEPOIMENTOS -->
-<section id="depoimentos" class="py-20 relative z-10">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Depoimentos</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="card-module p-6 rounded-xl">
-                <p class="text-gray-300 text-sm">"Ferramenta incrível! Facilitou demais minhas análises." — Lucas M.</p>
-            </div>
-            <div class="card-module p-6 rounded-xl">
-                <p class="text-gray-300 text-sm">"Design futurista e consultas rápidas. Recomendo!" — Mariana F.</p>
-            </div>
-            <div class="card-module p-6 rounded-xl">
-                <p class="text-gray-300 text-sm">"Excelente suporte e estabilidade. Me salvou várias vezes." — Ricardo T.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="bg-black/50 py-10 border-t border-violet-900/50" id="suporte">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500">
-        <div class="text-center mb-6">
-            <span class="text-2xl font-extrabold tracking-widest" style="color: var(--color-lilac-soft);">
-                4<span class="text-white">Track</span>
-            </span>
-        </div>
-        <div class="flex flex-wrap justify-center space-x-6 mb-6 text-sm">
-            <a href="#" id="link-terms" class="hover:text-violet-400 transition">Termos de Serviço</a>
-            <a href="#" class="hover:text-violet-400 transition">Política de Privacidade</a>
-            <a href="#" class="hover:text-violet-400 transition">Trabalhe Conosco</a>
-            <a href="#suporte" class="hover:text-violet-400 transition">Suporte</a>
-        </div>
-
-        <div class="flex justify-center space-x-6 mb-6 text-xl">
-            <a href="#" class="hover:text-violet-400 transition"><i class="fab fa-linkedin"></i></a>
-            <a href="#" class="hover:text-violet-400 transition"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="hover:text-violet-400 transition"><i class="fab fa-github"></i></a>
-        </div>
-
-        <p class="text-xs">&copy; 2024 4Track. Todos os direitos reservados.</p>
-    </div>
-</footer>
-
-<!-- MODAL LOGIN / PLANOS -->
-<div id="modal-backdrop" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80">
-    <div class="max-w-md w-full mx-4 bg-[rgba(12,12,30,0.95)] border border-violet-700/40 rounded-2xl p-6 relative">
-        <button id="modal-close" class="absolute top-4 right-4 text-gray-300 hover:text-white"><i class="fas fa-times"></i></button>
-        <h3 class="text-2xl font-bold text-white mb-4 text-center">Login ou Selecione seu Plano</h3>
-        <p class="text-gray-300 text-sm mb-4 text-center">Selecione um plano ou entre no sistema.</p>
-
-        <form id="login-form" class="space-y-4">
-            <div>
-                <label class="text-sm text-gray-300">Usuário</label>
-                <input id="login-user" type="text" required class="w-full px-4 py-2 rounded-lg bg-black/40 border border-violet-700 text-white focus:outline-none focus:ring-2 focus:ring-violet-400">
-            </div>
-            <div>
-                <label class="text-sm text-gray-300">Senha</label>
-                <input id="login-pass" type="password" required class="w-full px-4 py-2 rounded-lg bg-black/40 border border-violet-700 text-white focus:outline-none focus:ring-2 focus:ring-violet-400">
-            </div>
-            <div class="flex justify-between items-center text-xs text-gray-400">
-                <a href="https://wa.me/5544999119849" target="_blank" class="hover:text-white">Esqueci a senha</a>
-                <div class="flex items-center space-x-2">
-                    <input type="checkbox" id="terms-check" class="accent-violet-600">
-                    <label for="terms-check">Concordo com os <a href="#" id="modal-terms-link" class="underline text-violet-400 hover:text-violet-200">Termos de Uso</a></label>
+    <!-- ============================= -->
+    <!-- DEPOIMENTOS                   -->
+    <!-- ============================= -->
+    <section id="depoimentos" class="py-20 px-4 sm:px-6 lg:px-8 container mx-auto">
+        <h2 class="text-4xl font-bold text-center mb-12 text-white">
+            O que nossos clientes dizem
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="card-module p-6 rounded-xl border-t-4 border-violet-500/50">
+                <p class="text-gray-300 italic mb-4">"A 4Track revolucionou nossa auditoria interna. A velocidade e a profundidade dos dados fornecidos são inigualáveis."</p>
+                <div class="flex items-center mt-4">
+                    <img src="https://placehold.co/60x60/4A148C/C7A2E8?text=A" class="w-10 h-10 rounded-full mr-3 border border-violet-500">
+                    <div>
+                        <p class="font-semibold text-white">Ana Carvalho</p>
+                        <p class="text-xs text-gray-400">Diretora de Compliance, TechCorp</p>
+                    </div>
                 </div>
             </div>
-            <button type="submit" class="btn-premium w-full py-2 rounded-full font-semibold mt-2">Entrar</button>
+            <div class="card-module p-6 rounded-xl border-t-4 border-violet-500/50">
+                <p class="text-gray-300 italic mb-4">"Precisávamos de uma solução que fosse robusta e discreta. A 4Track entrega precisão dos dados 100% confiável."</p>
+                <div class="flex items-center mt-4">
+                    <img src="https://placehold.co/60x60/4A148C/C7A2E8?text=J" class="w-10 h-10 rounded-full mr-3 border border-violet-500">
+                    <div>
+                        <p class="font-semibold text-white">João Mendes</p>
+                        <p class="text-xs text-gray-400">Head de Risco, Global Consultoria</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-module p-6 rounded-xl border-t-4 border-violet-500/50">
+                <p class="text-gray-300 italic mb-4">"A transição para a 4Track foi imediata. Design futurista é funcional e acelera nosso processo."</p>
+                <div class="flex items-center mt-4">
+                    <img src="https://placehold.co/60x60/4A148C/C7A2E8?text=M" class="w-10 h-10 rounded-full mr-3 border border-violet-500">
+                    <div>
+                        <p class="font-semibold text-white">Marcos Silva</p>
+                        <p class="text-xs text-gray-400">Gerente de Segurança, CyberSec LTDA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- ============================= -->
+<!-- MODAL LOGIN + PLANOS           -->
+<!-- ============================= -->
+<div id="modal-backdrop" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+    <div class="bg-black/95 p-6 rounded-xl w-full max-w-md relative text-white">
+        <button id="modal-close" class="absolute top-4 right-4 text-xl">&times;</button>
+        <h2 class="text-2xl font-bold mb-4">Login</h2>
+        <form id="login-form" class="flex flex-col space-y-4">
+            <input type="text" id="login-user" placeholder="Usuário" required>
+            <input type="password" id="login-pass" placeholder="Senha" required>
+            <div class="flex items-center space-x-2">
+                <input type="checkbox" id="terms-check">
+                <label for="terms-check" class="text-sm">Concordo e aceito todas as <a href="#" id="modal-terms-link" class="text-lilac-soft underline">imposições dos Termos de Uso</a>.</label>
+            </div>
+            <button type="submit" class="btn-premium py-2">Entrar</button>
+            <a href="https://wa.me/5544999119849" class="text-sm text-lilac-soft underline">Esqueci minha senha</a>
         </form>
+        <div id="planos-container-modal" class="mt-6">
+            <!-- Planos exibidos aqui via JS -->
+        </div>
     </div>
 </div>
 
+<!-- ============================= -->
+<!-- FOOTER                         -->
+<!-- ============================= -->
+<footer class="bg-black/50 py-10 border-t border-violet-900/50 text-center text-gray-500">
+    <div class="text-center mb-6">
+        <span class="text-2xl font-extrabold tracking-widest text-lilac-soft">4<span class="text-white">Track</span></span>
+    </div>
+    <div class="flex flex-wrap justify-center space-x-6 mb-6 text-sm">
+        <a href="#" class="hover:text-lilac-soft transition">Termos de Serviço</a>
+        <a href="#" class="hover:text-lilac-soft transition">Política de Privacidade</a>
+        <a href="#" class="hover:text-lilac-soft transition">Trabalhe Conosco</a>
+        <a href="#suporte" class="hover:text-lilac-soft transition">Suporte</a>
+    </div>
+    <div class="flex justify-center space-x-6 mb-6 text-xl">
+        <a href="#" class="hover:text-lilac-soft transition"><i class="fab fa-linkedin"></i></a>
+        <a href="#" class="hover:text-lilac-soft transition"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="hover:text-lilac-soft transition"><i class="fab fa-github"></i></a>
+    </div>
+    <p class="text-xs">&copy; 2024 4Track. Todos os direitos reservados. Tecnologia de Inteligência Analítica.</p>
+</footer>
+
+<script src="assets/js/main.js"></script>
 </body>
 </html>
