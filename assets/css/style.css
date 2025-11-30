@@ -1,204 +1,190 @@
 /* ============================= */
-/* VARIÁVEIS DE CORES E FONTES  */
+/* VARIÁVEIS DE COR               */
 /* ============================= */
 :root {
-    --color-lilac-soft: #c7a2e8;
-    --color-lilac-dark: #5b2c9b;
-    --color-black-tech: #0c0c1e;
-    --color-white-tech: #ffffff;
+    --color-tech-black: #0C0C1E;
+    --color-deep-purple: #4A148C;
+    --color-lilac-soft: #C7A2E8;
+    --color-violet-deep: #6A1B9A;
 }
 
 /* ============================= */
-/* RESET & BASE                  */
+/* RESET & BODY                   */
 /* ============================= */
-* {
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-tech-black);
+    color: white;
+    overflow-x: hidden;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-}
-
-body {
-    background-color: var(--color-black-tech);
-    color: var(--color-white-tech);
-    scroll-behavior: smooth;
 }
 
 /* ============================= */
-/* HEADER / MENU                 */
+/* CANVAS DE FUNDO                */
+/* ============================= */
+#data-network {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+/* ============================= */
+/* HERO / CONTENT                 */
+/* ============================= */
+.hero-content {
+    position: relative;
+    z-index: 10;
+    padding-top: 6rem;
+}
+
+/* ============================= */
+/* GLASS HEADER                   */
 /* ============================= */
 .glass-header {
-    backdrop-filter: blur(12px);
-    background-color: rgba(12,12,30,0.85);
-    border-bottom: 1px solid rgba(199,162,232,0.25);
+    backdrop-filter: blur(10px) saturate(180%);
+    background-color: rgba(12, 12, 30, 0.7);
 }
 
+/* LINKS DO MENU */
 .menu-link {
-    color: var(--color-white-tech);
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.menu-link:hover {
-    color: var(--color-lilac-soft);
-}
-
-#mobile-menu a:hover {
-    color: var(--color-lilac-soft);
-}
-
-.btn-premium {
-    background: linear-gradient(45deg, var(--color-lilac-soft), #fff);
-    color: #000;
-    font-weight: 600;
-    transition: all 0.3s;
-    border: 1px solid var(--color-lilac-soft);
-}
-
-.btn-premium:hover {
-    background: linear-gradient(45deg, #fff, var(--color-lilac-soft));
-    color: #000;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(199,162,232,0.4);
-}
-
-/* ============================= */
-/* HERO                          */
-/* ============================= */
-#inicio {
-    background: linear-gradient(180deg, rgba(12,12,30,0.95) 0%, rgba(12,12,30,0.8) 100%);
-}
-
-#inicio h1 {
-    text-shadow: 0 0 8px rgba(199,162,232,0.5);
-}
-
-#inicio p {
     color: #ccc;
+    text-decoration: none;
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+}
+.menu-link:hover {
+    color: white;
+    border-color: var(--color-violet-deep);
+}
+
+/* BOTÕES PREMIUM */
+.btn-premium {
+    background: linear-gradient(90deg, var(--color-violet-deep), var(--color-deep-purple));
+    box-shadow: 0 4px 15px rgba(199, 162, 232, 0.4);
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-premium:hover {
+    opacity: 0.9;
+    box-shadow: 0 6px 20px rgba(199, 162, 232, 0.6);
 }
 
 /* ============================= */
-/* CARTÕES / CARDS               */
+/* CARDS / MODULES                */
 /* ============================= */
 .card-module {
-    background: rgba(12,12,30,0.85);
-    border: 1px solid rgba(199,162,232,0.25);
-    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(199, 162, 232, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 1rem;
-    transition: transform 0.3s, box-shadow 0.3s;
+    padding: 1.5rem;
+    text-align: center;
 }
-
 .card-module:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 25px rgba(199,162,232,0.3);
+    box-shadow: 0 10px 30px rgba(199, 162, 232, 0.15);
 }
 
+/* ICONES LILAS */
 .icon-lilac {
-    display: flex;
+    color: var(--color-lilac-soft);
+    border: 2px solid var(--color-lilac-soft);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-lilac-soft);
-    background: rgba(199,162,232,0.15);
-    width: 56px;
-    height: 56px;
+    width: 3.5rem;
+    height: 3.5rem;
     border-radius: 50%;
-    margin: 0 auto 1rem auto;
+    margin: 0 auto 1rem;
     font-size: 1.5rem;
 }
 
 /* ============================= */
-/* PLANOS                        */
-/* ============================= */
-#planos .card-module {
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid rgba(199,162,232,0.25);
-}
-
-#planos .card-module:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(199,162,232,0.3);
+/* DIVISOR DE SEÇÃO               */
+.section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(74, 20, 140, 0) 0%, var(--color-deep-purple) 50%, rgba(74, 20, 140, 0) 100%);
+    opacity: 0.4;
+    margin: 2rem 0;
 }
 
 /* ============================= */
-/* MODAL LOGIN                   */
+/* MODAL LOGIN / PLANOS           */
 /* ============================= */
 #modal-backdrop {
     display: flex;
-    animation: fadeIn 0.3s ease forwards;
+    align-items: center;
+    justify-content: center;
 }
-
 #modal-backdrop.hidden {
     display: none;
 }
-
 #modal-backdrop .btn-premium {
-    margin-top: 0.5rem;
+    width: 100%;
 }
 
-#modal-backdrop input[type="text"],
-#modal-backdrop input[type="password"] {
-    background: rgba(0,0,0,0.35);
-    border: 1px solid rgba(199,162,232,0.25);
-    color: #fff;
+#modal-backdrop form input[type="text"],
+#modal-backdrop form input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(199, 162, 232, 0.3);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+#modal-backdrop form input::placeholder {
+    color: rgba(255,255,255,0.6);
 }
 
-#modal-backdrop input:focus {
-    outline: none;
-    border-color: var(--color-lilac-soft);
-    box-shadow: 0 0 8px var(--color-lilac-soft);
+#modal-backdrop form label {
+    font-size: 0.8rem;
 }
 
-/* Checkbox Lilac */
-#terms-check:checked {
+#modal-backdrop a {
+    color: var(--color-lilac-soft);
+    text-decoration: underline;
+}
+
+#modal-backdrop #planos-container-modal {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* ============================= */
+/* CHECKBOX TERMS                */
+#modal-backdrop input[type="checkbox"] {
     accent-color: var(--color-lilac-soft);
 }
 
 /* ============================= */
-/* FOOTER                        */
-/* ============================= */
-footer {
-    border-top: 1px solid rgba(199,162,232,0.25);
-}
-
-footer a {
-    transition: color 0.3s;
-}
-
-footer a:hover {
-    color: var(--color-lilac-soft);
-}
-
-/* ============================= */
-/* CANVAS / BACKGROUND           */
-/* ============================= */
-#data-network {
-    position: fixed;
-    top:0;
-    left:0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
-
-/* ============================= */
-/* ANIMAÇÕES                     */
-/* ============================= */
-@keyframes fadeIn {
-    from {opacity:0;}
-    to {opacity:1;}
-}
-
-@keyframes floatUp {
-    0% { transform: translateY(0px);}
-    50% { transform: translateY(-10px);}
-    100% { transform: translateY(0px);}
-}
-
-/* ============================= */
-/* RESPONSIVO                     */
+/* RESPONSIVO / MOBILE            */
 /* ============================= */
 @media (max-width: 1024px) {
     #mobile-menu {
         display: none;
     }
+}
+
+/* ============================= */
+/* HOVER / INTERAÇÃO FUTURISTA    */
+/* ============================= */
+button:hover, .btn-premium:hover {
+    cursor: pointer;
+}
+
+/* ============================= */
+/* TEXTOS FUTURISTAS              */
+.text-lilac-soft {
+    color: var(--color-lilac-soft);
 }
