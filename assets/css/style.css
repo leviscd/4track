@@ -1,312 +1,139 @@
-/* ===================== RESET ===================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Inter", sans-serif;
+/* Cores customizadas baseadas na paleta */
+:root {
+    --color-tech-black: #0C0C1E; /* Preto Tecnológico */
+    --color-deep-purple: #4A148C; /* Roxo Escuro/Violeta */
+    --color-lilac-soft: #C7A2E8; /* Lilás Suave - o pulso */
+    --color-violet-deep: #6A1B9A; /* Violeta Profundo */
 }
 
 body {
-    background: #0A0A1A;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-tech-black);
     color: white;
     overflow-x: hidden;
 }
 
-/* ===================== SCROLL SMOOTH ===================== */
-html {
-    scroll-behavior: smooth;
-}
-
-/* ===================== HEADER ===================== */
-.glass-header {
-    background: rgba(10, 10, 30, 0.65);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.btn-premium {
-    background: linear-gradient(90deg, #7A00FF, #D000FF);
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    color: white;
-    font-weight: bold;
-    border-radius: 6px;
-    box-shadow: 0 0 15px rgba(122, 0, 255, 0.5);
-    transition: 0.25s;
-}
-
-.btn-premium:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 25px rgba(122, 0, 255, 0.7);
-}
-
-/* ===================== MENU MOBILE ===================== */
-.mobile-link {
-    text-decoration: none;
-    color: white;
-    font-size: 1.3rem;
-    padding: 15px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: block;
-}
-
-/* ===================== HERO ===================== */
-.hero-section {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 30px;
-    background: url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&w=1650&q=80')
-        center/cover no-repeat;
-    position: relative;
-}
-
-.hero-section::before {
-    content: "";
+/* Estilo da animação de fundo - Tela cheia e fixa */
+#data-network {
     position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1; /* Abaixo do conteúdo principal */
+    opacity: 0.6; /* Sutil */
 }
 
+/* Container principal para sobrepor a animação */
 .hero-content {
     position: relative;
-    max-width: 700px;
+    z-index: 10;
+    padding-top: 6rem; /* Espaço para o header */
 }
 
-.hero-title {
-    font-size: 2.7rem;
-    font-weight: 800;
-    margin-bottom: 15px;
+/* Efeito de Vidro Fosco (Glassmorphism) para o Header */
+.glass-header {
+    backdrop-filter: blur(10px) saturate(180%);
+    background-color: rgba(12, 12, 30, 0.7); /* tech-black com transparência */
 }
 
-.hero-subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    opacity: 0.85;
+/* Estilo para botões premium */
+.btn-premium {
+    background: linear-gradient(90deg, var(--color-violet-deep), var(--color-deep-purple));
+    box-shadow: 0 4px 15px rgba(199, 162, 232, 0.4);
+    transition: all 0.3s ease;
+}
+.btn-premium:hover {
+    opacity: 0.9;
+    box-shadow: 0 6px 20px rgba(199, 162, 232, 0.6);
 }
 
-/* ===================== SECTIONS ===================== */
-.section {
-    padding: 80px 20px;
-    text-align: center;
+/* Estilo do card premium com borda sutil */
+.card-module {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(199, 162, 232, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
-.section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 40px;
-}
-
-/* ===================== CARDS ===================== */
-.cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    padding: 0 20px;
-    max-width: 1050px;
-    margin: auto;
-}
-
-.card {
-    background: #111127;
-    padding: 30px;
-    border-radius: 12px;
-    text-align: left;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 0 20px rgba(122, 0, 255, 0.3);
-}
-
-/* ===================== PLANOS ===================== */
-.plans-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 25px;
-    max-width: 1000px;
-    margin: auto;
-}
-
-.plan-card {
-    background: #101026;
-    padding: 30px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    transition: 0.2s;
-}
-
-.plan-card:hover {
+.card-module:hover {
     transform: translateY(-5px);
-    box-shadow: 0 0 20px rgba(122, 0, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(199, 162, 232, 0.15);
 }
 
-.price {
-    margin: 15px 0;
-    font-size: 1.7rem;
-    font-weight: bold;
-    color: #D000FF;
-}
-
-/* ===================== MODAL ===================== */
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(10px);
-    display: flex;
-    justify-content: center;
+/* Estilo para o ícone de linha fina (lilás) */
+.icon-lilac {
+    color: var(--color-lilac-soft);
+    border: 2px solid var(--color-lilac-soft);
+    display: inline-flex;
     align-items: center;
-    z-index: 40;
+    justify-content: center;
 }
 
-.modal.hidden {
+/* Estilo para o separador de seção (minimalista) */
+.section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(74, 20, 140, 0) 0%, var(--color-deep-purple) 50%, rgba(74, 20, 140, 0) 100%);
+    opacity: 0.4;
+}
+
+/* =========================
+   Novos estilos: Modals & Form
+   ========================= */
+
+/* Modal backdrop (flex container) */
+#modal-backdrop {
     display: none;
 }
+#modal-backdrop.flex { display:flex; }
 
-.modal-content {
-    background: #0F0F25;
-    padding: 35px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-    box-shadow: 0 0 25px rgba(122, 0, 255, 0.4);
-}
+/* Terms backdrop */
+#terms-backdrop { display: none; }
+#terms-backdrop.flex { display:flex; }
 
-.close-btn {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    font-size: 1.6rem;
-    cursor: pointer;
+/* Inputs */
+input[type="text"], input[type="password"], textarea {
     color: white;
-    opacity: 0.8;
+    background: transparent;
+    border-radius: 8px;
+    border: 1px solid rgba(114, 36, 135, 0.35);
 }
 
-.close-btn:hover {
-    opacity: 1;
+/* Scrollbar personalizado leve para modals (suave) */
+#terms-backdrop .prose::-webkit-scrollbar {
+    width: 10px;
+}
+#terms-backdrop .prose::-webkit-scrollbar-thumb {
+    background: rgba(106, 27, 154, 0.4);
+    border-radius: 8px;
 }
 
-.modal-title {
-    font-size: 1.8rem;
-    font-weight: bold;
-}
-
-.modal-plan {
-    margin: 15px 0;
-    font-size: 1.3rem;
-    color: #D000FF;
-}
-
-/* ===================== LOGIN ===================== */
-.section-login {
-    padding: 100px 20px;
-    display: flex;
-    justify-content: center;
-    background: #070716;
-}
-
-.login-box {
-    width: 100%;
-    max-width: 400px;
-    background: #111127;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 0 25px rgba(122, 0, 255, 0.2);
-}
-
-.login-title {
-    font-size: 1.9rem;
-    font-weight: bold;
-    margin-bottom: 25px;
-    text-align: center;
-}
-
-.login-input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 18px;
-    border: none;
-    border-radius: 6px;
-    background: #0D0D20;
-    color: white;
-    outline: none;
-    font-size: 1rem;
-}
-
-.login-input:focus {
-    box-shadow: 0 0 10px rgba(122, 0, 255, 0.4);
-}
-
-.login-terms {
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    line-height: 1.4rem;
-}
-
-.termos-link {
-    color: #D000FF;
-    cursor: pointer;
+/* Estilo do link de termos (inline) */
+#open-terms-inline {
+    color: var(--color-lilac-soft);
     text-decoration: underline;
 }
 
-.login-btn {
-    width: 100%;
-    margin-bottom: 15px;
+/* Mensagem de erro */
+#login-error {
+    color: #ff7b7b;
 }
 
-.forgot-password,
-.create-account {
-    display: block;
-    text-align: center;
-    margin-top: 8px;
-    color: #B0B0C0;
-    font-size: 0.9rem;
-    text-decoration: none;
+/* Classes utilitárias */
+.hidden { display: none !important; }
+
+/* animação simples fade-in usada por observer */
+.fade-in {
+    transform: translateY(0);
+    opacity: 1;
+    transition: opacity 700ms ease, transform 700ms ease;
 }
 
-.forgot-password:hover,
-.create-account:hover {
-    color: #D000FF;
+/* inicialmente seções com reveal estarão deslocadas */
+.reveal {
+    transform: translateY(10px);
+    opacity: 0;
 }
 
-/* ===================== TERMOS DE USO ===================== */
-.termos-content {
-    max-width: 700px;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.termos-text {
-    margin-top: 20px;
-    line-height: 1.6rem;
-    font-size: 1rem;
-    opacity: 0.9;
-}
-
-.termos-text h3 {
-    margin-top: 20px;
-    font-size: 1.2rem;
-    color: #D000FF;
-}
-
-/* ===================== RESPONSIVO ===================== */
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 2rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1rem;
-    }
-
-    .login-box {
-        padding: 30px;
-    }
+/* Responsividade do modal */
+@media (max-width: 640px) {
+    #modal-backdrop > div { margin: 0 12px; width: calc(100% - 24px); }
 }
