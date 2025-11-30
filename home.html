@@ -1,1 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4Track - Tecnologia precisa para consultas inteligentes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* Cores customizadas baseadas na paleta */
+        :root {
+            --color-tech-black: #0C0C1E; /* Preto Tecnológico */
+            --color-deep-purple: #4A148C; /* Roxo Escuro/Violeta */
+            --color-lilac-soft: #C7A2E8; /* Lilás Suave - o pulso */
+            --color-violet-deep: #6A1B9A; /* Violeta Profundo */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-tech-black);
+            color: white;
+            overflow-x: hidden;
+        }
 
+        /* Estilo da animação de fundo - Tela cheia e fixa */
+        #data-network {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1; /* Abaixo do conteúdo principal */
+            opacity: 0.6; /* Sutil */
+        }
+
+        /* Container principal para sobrepor a animação */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            padding-top: 6rem; /* Espaço para o header */
+        }
+
+        /* Efeito de Vidro Fosco (Glassmorphism) para o Header */
+        .glass-header {
+            backdrop-filter: blur(10px) saturate(180%);
+            background-color: rgba(12, 12, 30, 0.7); /* tech-black com transparência */
+        }
+
+        /* Estilo para botões premium */
+        .btn-premium {
+            background: linear-gradient(90deg, var(--color-violet-deep), var(--color-deep-purple));
+            box-shadow: 0 4px 15px rgba(199, 162, 232, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-premium:hover {
+            opacity: 0.9;
+            box-shadow: 0 6px 20px rgba(199, 162, 232, 0.6);
+        }
+
+        /* Estilo do card premium com borda sutil */
+        .card-module {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(199, 162, 232, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-module:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(199, 162, 232, 0.15);
+        }
+
+        /* Estilo para o ícone de linha fina (lilás) */
+        .icon-lilac {
+            color: var(--color-lilac-soft);
+            border: 2px solid var(--color-lilac-soft);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Estilo para o separador de seção (minimalista) */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(74, 20, 140, 0) 0%, var(--color-deep-purple) 50%, rgba(74, 20, 140, 0) 100%);
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body class="bg-tech-black min-h-screen">
+
+    <!-- 1. ANIMAÇÃO PRINCIPAL (CANVAS) -->
+    <canvas id="data-network"></canvas>
+
+    <!-- 2. HEADER -->
+    <header class="glass-header fixed top-0 left-0 w-full z-20 shadow-lg">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo Minimalista -->
+            <a href="#" class="text-xl font-extrabold tracking-widest" style="color: var(--color-lilac-soft);">
+                4<span class="text-white">Track</span>
+            </a>
+
+            <!-- Menu Desktop -->
+            <div class="hidden lg:flex space-x-8 items-center text-sm">
+                <a href="#inicio" class="text-gray-300 hover:text-white transition duration-200 border-b-2 border-transparent hover:border-violet-400">Início</a>
+                <a href="#recursos" class="text-gray-300 hover:text-white transition duration-200 border-b-2 border-transparent hover:border-violet-400">Recursos</a>
+                <a href="#depoimentos" class="text-gray-300 hover:text-white transition duration-200 border-b-2 border-transparent hover:border-violet-400">Depoimentos</a>
+                <a href="#suporte" class="text-gray-300 hover:text-white transition duration-200 border-b-2 border-transparent hover:border-violet-400">Suporte</a>
+                
+                <!-- Botão Comprar Acesso no Header (Destaque) -->
+                <button class="px-5 py-2 rounded-full font-semibold btn-premium shadow-none hover:shadow-xl">
+                    Comprar Acesso
+                </button>
+            </div>
+
+            <!-- Botão Mobile Menu (Oculto no Desktop) -->
+            <button id="mobile-menu-button" class="lg:hidden text-white focus:outline-none">
+                <i class="fas fa-bars fa-lg"></i>
+            </button>
+        </nav>
+        <!-- Menu Mobile (oculto por padrão) -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-tech-black p-4 border-t border-violet-700/50">
+            <a href="#inicio" class="block py-2 text-gray-300 hover:text-white border-b border-gray-800">Início</a>
+            <a href="#recursos" class="block py-2 text-gray-300 hover:text-white border-b border-gray-800">Recursos</a>
+            <a href="#depoimentos" class="block py-2 text-gray-300 hover:text-white border-b border-gray-800">Depoimentos</a>
+            <a href="#suporte" class="block py-2 text-gray-300 hover:text-white border-b border-gray-800">Suporte</a>
+            <button class="w-full mt-4 py-2 rounded-lg font-semibold btn-premium">Comprar Acesso</button>
+        </div>
+    </header>
+
+    <main class="hero-content pb-16">
+        <!-- 3. HERO PRINCIPAL -->
+        <section id="inicio" class="relative min-h-[85vh] flex items-center justify-center text-center px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl pt-16">
+                <!-- Saudação por Horário -->
+                <div id="greeting" class="text-sm font-medium mb-4 uppercase tracking-wider" style="color: var(--color-lilac-soft); text-shadow: 0 0 5px rgba(199, 162, 232, 0.3);">
+                    <!-- Conteúdo preenchido por JS -->
+                </div>
+
+                <!-- Título -->
+                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold leading-tight mb-6 tracking-tight text-white">
+                    Tecnologia precisa para consultas <span class="bg-clip-text text-transparent" style="background-image: linear-gradient(45deg, var(--color-lilac-soft), white);">inteligentes</span>.
+                </h1>
+
+                <!-- Subtítulo -->
+                <p class="text-lg sm:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                    Liberamos acesso total a consultas avançadas com velocidade, precisão e design futurista.
+                </p>
+
+                <!-- Botões -->
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                    <a href="#" class="px-8 py-3 rounded-full font-bold btn-premium text-lg">
+                        <i class="fas fa-rocket mr-2"></i> Comprar Acesso
+                    </a>
+                    <a href="#" class="px-8 py-3 rounded-full font-bold text-white border-2 border-violet-700 hover:border-violet-500 transition duration-300 bg-transparent">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Entrar no Sistema
+                    </a>
+                </div>
+
+                <!-- Holograma Sutil (Visual apenas) -->
+                <div class="mt-20 max-w-4xl mx-auto relative hidden md:block">
+                    <!-- Placeholder de Holograma Sutil -->
+                    <div class="w-full h-40 rounded-t-full border-t border-x border-violet-500/30 bg-violet-900/10 shadow-lg" style="box-shadow: 0 -10px 40px rgba(74, 20, 140, 0.5);">
+                        <div class="h-full flex items-center justify-center text-gray-500 text-sm italic">
+                            Interface de Análise 4Track (Visualização Sutil)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MÓDULOS DE CONSULTA -->
+        <section id="recursos" class="py-20 px-4 sm:px-6 lg:px-8 container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">
+                Módulos de Inteligência Analítica
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card Modelo -->
+                <div class="card-module rounded-xl p-6 text-center">
+                    <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Consulta CPF</h3>
+                    <p class="text-gray-400 text-sm">Auditoria completa de pessoa física, traçando histórico e conexões com precisão.</p>
+                </div>
+
+                <div class="card-module rounded-xl p-6 text-center">
+                    <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
+                        <i class="fas fa-user-tag"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Consulta Nome</h3>
+                    <p class="text-gray-400 text-sm">Mapeamento de homônimos e referências digitais com análise de big data.</p>
+                </div>
+
+                <div class="card-module rounded-xl p-6 text-center">
+                    <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Consulta Telefone</h3>
+                    <p class="text-gray-400 text-sm">Verificação de portabilidade, histórico de uso e vínculos cadastrais.</p>
+                </div>
+
+                <div class="card-module rounded-xl p-6 text-center">
+                    <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
+                        <i class="fas fa-at"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Consulta Email</h3>
+                    <p class="text-gray-400 text-sm">Análise de risco, validação de contas e rastreamento de atividade online.</p>
+                </div>
+
+                <div class="card-module rounded-xl p-6 text-center">
+                    <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Consulta Endereço</h3>
+                    <p class="text-gray-400 text-sm">Confirmação geográfica e histórico de residências com alta fidelidade.</p>
+                </div>
+
+                <!-- Card de Placa (Em Integração) -->
+                <div class="card-module rounded-xl p-6 text-center relative border-dashed border-violet-700/50">
+                    <!-- Tag discreta -->
+                    <span class="absolute top-2 right-2 text-xs font-medium px-2 py-1 rounded-full bg-violet-700/50 text-white">
+                        Integrando
+                    </span>
+                    <div class="icon-lilac rounded-full w-14 h-14 mx-auto mb-4 text-2xl opacity-60">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-500">Consulta Veicular</h3>
+                    <p class="text-gray-600 text-sm">Módulo em integração. Disponível em breve para análise de propriedade e histórico veicular.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. DEPOIMENTOS HUMANIZADOS -->
+        <section id="depoimentos" class="py-20 px-4 sm:px-6 lg:px-8 container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">
+                O que nossos clientes dizem
+            </h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Depoimento 1 -->
+                <div class="card-module p-6 rounded-xl border-t-4 border-violet-500/50">
+                    <p class="text-gray-300 italic mb-4">"A 4Track revolucionou nossa auditoria interna. A velocidade e a profundidade dos dados fornecidos são inigualáveis. A interface limpa nos permite focar na inteligência, não na navegação."</p>
+                    <div class="flex items-center mt-4">
+                        <img src="https://placehold.co/60x60/4A148C/C7A2E8?text=A" alt="Foto de um Cliente" class="w-10 h-10 rounded-full mr-3 border border-violet-500">
+                        <div>
+                            <p class="font-semibold text-white">Ana Carvalho</p>
+                            <p class="text-xs text-gray-400">Diretora de Compliance, TechCorp</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Depoimento 2 -->
+                <div class="card-module p-6 rounded-xl border-t-4 border-violet-500/50">
+                    <p class="text-gray-300 italic mb-4">"Precisávamos de uma solução que fosse robusta e discreta. A 4Track entrega uma estética premium que se alinha à nossa marca, e a precisão dos dados é 100% confiável. Fantástico."</p>
+                    <div class="flex items-center mt-4">
+                        <img src="https://placehold.co/60x60/4A148C/C7A2E8?text=J" alt="Foto de um Cliente" class="w-10 h-10 rounded-full mr-3 border border-violet-500">
+                        <div>
+                            <p class="font-semibold text-white">João Mendes</p>
+                            <p class="text-xs text-gray-400">Head de Risco, Global Consultoria</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Depoimento 3 -->
+                <div class="card-module p-6 rounded-xl border-t-4 border-violet-500/50">
+                    <p class="text-gray-300 italic mb-4">"A transição para a 4Track foi imediata. Sem curva de aprendizado. O design futurista não é apenas bonito, é funcional e acelera nosso processo de tomada de decisão."</p>
+                    <div class="flex items-center mt-4">
+                        <img src="https://placehold.co/60x60/4A148C/C7A2E8?text=M" alt="Foto de um Cliente" class="w-10 h-10 rounded-full mr-3 border border-violet-500">
+                        <div>
+                            <p class="font-semibold text-white">Marcos Silva</p>
+                            <p class="text-xs text-gray-400">Gerente de Segurança, CyberSec LTDA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider my-16"></div>
+
+        <!-- 6. CTA FINAL (Clean, Premium) -->
+        <section class="py-20 px-4 sm:px-6 lg:px-8 container mx-auto text-center">
+            <h2 class="text-4xl sm:text-5xl font-extrabold mb-8 text-white">
+                Garanta seu acesso <span style="color: var(--color-lilac-soft);">agora</span>.
+            </h2>
+            <p class="text-gray-400 mb-10 max-w-xl mx-auto">
+                Integre a precisão analítica da 4Track ao seu fluxo de trabalho. Soluções de big data prontas para o seu negócio.
+            </p>
+            <a href="#" class="inline-block px-10 py-4 rounded-full font-bold text-lg btn-premium">
+                <i class="fas fa-bolt mr-2"></i> Iniciar Análise
+            </a>
+        </section>
+    </main>
+
+    <!-- 7. FOOTER -->
+    <footer class="bg-black/50 py-10 border-t border-violet-900/50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500">
+            <!-- Logo Minimalista no Footer -->
+            <div class="text-center mb-6">
+                <span class="text-2xl font-extrabold tracking-widest" style="color: var(--color-lilac-soft);">
+                    4<span class="text-white">Track</span>
+                </span>
+            </div>
+
+            <!-- Links Essenciais -->
+            <div class="flex flex-wrap justify-center space-x-6 mb-6 text-sm">
+                <a href="#" class="hover:text-violet-400 transition">Termos de Serviço</a>
+                <a href="#" class="hover:text-violet-400 transition">Política de Privacidade</a>
+                <a href="#" class="hover:text-violet-400 transition">Trabalhe Conosco</a>
+                <a href="#suporte" class="hover:text-violet-400 transition">Suporte</a>
+            </div>
+
+            <!-- Ícones Minimalistas -->
+            <div class="flex justify-center space-x-6 mb-6 text-xl">
+                <a href="#" class="hover:text-violet-400 transition"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="hover:text-violet-400 transition"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-violet-400 transition"><i class="fab fa-github"></i></a>
+            </div>
+
+            <p class="text-xs">&copy; 2024 4Track. Todos os direitos reservados. Tecnologia de Inteligência Analítica.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT: Animação de Rede de Dados e Saudação -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('data-network');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const particleCount = 70; // Mantido elegante e discreto
+            const connectDistance = 150;
+            // Cores
+            const pulseColor = getComputedStyle(document.documentElement).getPropertyValue('--color-lilac-soft').trim();
+            const particleColor = 'rgba(255, 255, 255, 0.2)';
+            const lineColor = 'rgba(74, 20, 140, 0.5)'; // Linha Deep Purple
+
+            // Função para redimensionar o canvas
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            // Partícula (Unidade de Dados)
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.radius = Math.random() * 1.5 + 0.5;
+                    this.velocity = {
+                        x: (Math.random() - 0.5) * 0.1, // Movimento lento e elegante
+                        y: (Math.random() - 0.5) * 0.1,
+                    };
+                    this.opacity = Math.random() * 0.4 + 0.1;
+                    this.pulse = 0; // Para controle do pulso luminoso nos nós
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                    
+                    // Desenha o ponto (unidade de dado)
+                    ctx.fillStyle = particleColor.replace('0.2', this.opacity.toFixed(2));
+                    ctx.fill();
+                    
+                    // Se estiver em pulso, desenha um brilho lilás sutil
+                    if (this.pulse > 0) {
+                        ctx.shadowBlur = 10 * this.pulse;
+                        ctx.shadowColor = pulseColor;
+                        ctx.fillStyle = pulseColor;
+                        ctx.arc(this.x, this.y, this.radius * 1.5, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.shadowBlur = 0; // Reseta o blur
+                    }
+                }
+
+                update() {
+                    // Atualiza posição e verifica limites (movimento elegante, rebote suave)
+                    if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+                        this.velocity.x = -this.velocity.x;
+                    }
+                    if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+                        this.velocity.y = -this.velocity.y;
+                    }
+                    
+                    this.x += this.velocity.x;
+                    this.y += this.velocity.y;
+                    
+                    // Diminui o pulso lentamente
+                    this.pulse = Math.max(0, this.pulse - 0.005);
+                    
+                    // Pequena chance de iniciar um novo pulso (elegante e constante)
+                    if (Math.random() < 0.0005) {
+                        this.pulse = 1;
+                    }
+
+                    this.draw();
+                }
+            }
+
+            // Inicializa as partículas
+            function init() {
+                resizeCanvas();
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    particles.push(new Particle(x, y));
+                }
+            }
+
+            // Conecta as partículas (A Rede) e implementa o "Traçamento de Informações"
+            function connectParticles() {
+                // Offset de tempo para um movimento lento e sincronizado do fluxo
+                const timeOffset = Date.now() / 15000; 
+
+                for (let a = 0; a < particleCount; a++) {
+                    for (let b = a; b < particleCount; b++) {
+                        const pA = particles[a];
+                        const pB = particles[b];
+
+                        const dist = Math.sqrt(
+                            Math.pow(pA.x - pB.x, 2) + 
+                            Math.pow(pA.y - pB.y, 2)
+                        );
+
+                        if (dist < connectDistance) {
+                            // 1. Desenho da Linha de Conexão (Fundo)
+                            const lineAlpha = 1 - (dist / connectDistance);
+                            let currentLineColor = lineColor;
+                            let lineWidth = 0.5;
+
+                            // Pulso (mantido para a estética de auditoria)
+                            const maxPulse = Math.max(pA.pulse, pB.pulse);
+                            if (maxPulse > 0) {
+                                currentLineColor = pulseColor;
+                                lineWidth = 1 + maxPulse * 1.5;
+                            } else {
+                                currentLineColor = lineColor;
+                            }
+                            
+                            // Desenha a linha
+                            ctx.beginPath();
+                            // Atualiza a opacidade da cor da linha, mantendo a estética corporativa
+                            ctx.strokeStyle = currentLineColor.includes('rgba') ? currentLineColor.replace(/[\d\.]+\)/, (lineAlpha * 0.5).toFixed(2) + ')') : currentLineColor;
+                            ctx.lineWidth = lineWidth;
+                            ctx.moveTo(pA.x, pA.y);
+                            ctx.lineTo(pB.x, pB.y);
+                            ctx.stroke();
+
+                            // 2. Implementação do Fluxo de Dados (Ponto de Traçamento)
+                            // A unidade de dado viaja de A para B e volta (simulação de tracing)
+                            
+                            // Normaliza a distância baseada no offset de tempo (0 a 1 loop)
+                            let travel = (timeOffset % 1); 
+
+                            // Direção do trajeto: 0 -> 1 -> 0 (efeito ping-pong)
+                            const segmentDuration = 0.5; // Cada segmento (A->B e B->A) leva metade do ciclo
+                            let t;
+                            if (travel < segmentDuration) {
+                                // A -> B
+                                t = travel / segmentDuration;
+                            } else {
+                                // B -> A
+                                t = (1 - travel) / segmentDuration;
+                            }
+                            
+                            // Posição exata do ponto de fluxo (interpolação linear)
+                            const flowX = pA.x + (pB.x - pA.x) * t;
+                            const flowY = pA.y + (pB.y - pA.y) * t;
+
+                            // Desenha o ponto de fluxo lilás (como um 'pulse →' contínuo)
+                            ctx.beginPath();
+                            ctx.arc(flowX, flowY, 2.5, 0, Math.PI * 2, false); // Ponto de fluxo sutil
+                            ctx.fillStyle = pulseColor;
+                            ctx.shadowBlur = 15;
+                            ctx.shadowColor = pulseColor;
+                            ctx.fill();
+                            ctx.shadowBlur = 0; // Desliga o shadow para não afetar outros desenhos
+                        }
+                    }
+                }
+            }
+
+
+            // Loop de Animação
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa o canvas a cada frame
+                
+                connectParticles(); // Desenha as linhas E o fluxo (traçamento) primeiro
+                
+                // Atualiza e desenha os pontos
+                particles.forEach(p => p.update());
+            }
+
+            // 1. Inicializa a animação
+            init();
+            animate();
+
+            // 2. Garante que a animação é redimensionada
+            window.addEventListener('resize', init);
+        });
+
+        // 3. Saudação por Horário
+        function updateGreeting() {
+            const greetingElement = document.getElementById('greeting');
+            const hour = new Date().getHours();
+            let greetingText = "Dados acessíveis com segurança."; // Default
+            
+            if (hour >= 5 && hour < 12) {
+                greetingText = "Bom dia. Suas consultas estão prontas.";
+            } else if (hour >= 12 && hour < 18) {
+                greetingText = "Boa tarde. Continue avançando.";
+            } else {
+                greetingText = "Boa noite. Dados acessíveis com segurança.";
+            }
+            
+            greetingElement.textContent = greetingText;
+        }
+        updateGreeting();
+
+        // 4. Lógica do menu mobile
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+
+</body>
+</html>
