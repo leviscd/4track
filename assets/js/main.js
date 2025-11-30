@@ -1,92 +1,139 @@
+/* assets/js/main.js
+   2025 - 4Track - main JS unificado
+   - Animação (canvas)
+   - Menu mobile
+   - Smooth scroll
+   - Modals: Plans, Login, Terms
+   - Login simulation (localStorage)
+   - Redirect to WhatsApp for forgot / signup
+*/
+
 /* ============================
-   ANIMAÇÃO DO FUNDO (CANVAS)
+   Config / Helpers
    ============================ */
-(function () {
+const WHATSAPP_URL = "https://wa.me/5544999119849";
+
+function qs(sel, ctx = document) { return ctx.querySelector(sel); }
+function qsa(sel, ctx = document) { return Array.from((ctx || document).querySelectorAll(sel)); }
+
+function showModal(modalEl) {
+    if (!modalEl) return;
+    modalEl.classList.remove('hidden');
+    modalEl.style.display = 'flex';
+    // focus first input if present
+    const input = qs('input', modalEl);
+    if (input) setTimeout(() => input.focus(), 120);
+    document.body.style.overflow = 'hidden';
+}
+
+function hideModal(modalEl) {
+    if (!modalEl) return;
+    modalEl.classList.add('hidden');
+    modalEl.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function isLoggedIn() {
+    return localStorage.getItem('4track_logged') === '1';
+}
+function setLoggedIn(flag = true) {
+    if (flag) localStorage.setItem('4track_logged', '1');
+    else localStorage.removeItem('4track_logged');
+}
+
+/* ============================
+   Canvas Background Animation
+   ============================ */
+(function canvasAnimation() {
     const canvas = document.getElementById('data-network');
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let particles = [];
-    const particleCount = 70;
-    const connectDistance = 150;
 
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
 
-    class Particle {
-        constructor(x, y) {
-            this.x = x;
-            this.y = y;
-            this.radius = Math.random() * 1.5 + 0.5;
-            this.velocity = { x: (Math.random() - 0.5) * 0.1, y: (Math.random() - 0.5) * 0.1 };
-            this.opacity = Math.random() * 0.4 + 0.1;
+    const PARTICLE_COUNT = 70;
+    const CONNECT_DIST = 150;
+    const particles = [];
+
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+
+    class P {
+        constructor() {
+            this.x = rand(0, width);
+            this.y = rand(0, height);
+            this.r = rand(0.4, 1.8);
+            this.vx = rand(-0.12, 0.12);
+            this.vy = rand(-0.12, 0.12);
+            this.opacity = rand(0.08, 0.4);
             this.pulse = 0;
+        }
+        move() {
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+            this.x += this.vx;
+            this.y += this.vy;
+            this.pulse = Math.max(0, this.pulse - 0.006);
+            if (Math.random() < 0.0008) this.pulse = 1;
         }
         draw() {
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-            ctx.fillStyle = `rgba(255,255,255,${this.opacity.toFixed(2)})`;
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
             ctx.fill();
             if (this.pulse > 0) {
-                ctx.shadowBlur = 10 * this.pulse;
-                ctx.shadowColor = getComputedStyle(document.documentElement).getPropertyValue('--color-lilac-soft').trim();
-                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-lilac-soft').trim();
-                ctx.arc(this.x, this.y, this.radius * 1.5, 0, Math.PI * 2);
+                ctx.save();
+                ctx.shadowBlur = 12 * this.pulse;
+                ctx.shadowColor = getComputedStyle(document.documentElement).getPropertyValue('--color-lilac-soft').trim() || '#c7a2e8';
+                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-lilac-soft').trim() || '#c7a2e8';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r * 1.6, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.shadowBlur = 0;
+                ctx.restore();
             }
-        }
-        update() {
-            if (this.x + this.radius > canvas.width || this.x - this.radius < 0) this.velocity.x = -this.velocity.x;
-            if (this.y + this.radius > canvas.height || this.y - this.radius < 0) this.velocity.y = -this.velocity.y;
-            this.x += this.velocity.x;
-            this.y += this.velocity.y;
-            this.pulse = Math.max(0, this.pulse - 0.005);
-            if (Math.random() < 0.0008) this.pulse = 1;
-            this.draw();
         }
     }
 
     function initParticles() {
-        resizeCanvas();
-        particles = [];
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
-        }
+        particles.length = 0;
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new P());
     }
 
-    function connectParticles() {
-        const pulseColor = getComputedStyle(document.documentElement).getPropertyValue('--color-lilac-soft').trim();
-        const baseLineColor = 'rgba(74, 20, 140, 0.5)';
+    function connectAndFlow() {
+        const pulseColor = getComputedStyle(document.documentElement).getPropertyValue('--color-lilac-soft').trim() || '#c7a2e8';
+        const baseLine = 'rgba(74,20,140,0.45)';
         const timeOffset = Date.now() / 15000;
-
         for (let a = 0; a < particles.length; a++) {
             for (let b = a + 1; b < particles.length; b++) {
-                const pA = particles[a];
-                const pB = particles[b];
-                const dist = Math.hypot(pA.x - pB.x, pA.y - pB.y);
-                if (dist < connectDistance) {
-                    const lineAlpha = 1 - (dist / connectDistance);
-                    const maxPulse = Math.max(pA.pulse, pB.pulse);
+                const A = particles[a], B = particles[b];
+                const dx = A.x - B.x, dy = A.y - B.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < CONNECT_DIST) {
+                    const alpha = 1 - (dist / CONNECT_DIST);
+                    const maxPulse = Math.max(A.pulse, B.pulse);
                     ctx.beginPath();
-                    ctx.strokeStyle = maxPulse > 0 ? pulseColor : baseLineColor.replace('0.5', (lineAlpha * 0.45).toFixed(2));
+                    ctx.strokeStyle = maxPulse > 0 ? pulseColor : baseLine.replace('0.45', (alpha * 0.45).toFixed(2));
                     ctx.lineWidth = maxPulse > 0 ? 1 + maxPulse * 1.5 : 0.5;
-                    ctx.moveTo(pA.x, pA.y);
-                    ctx.lineTo(pB.x, pB.y);
+                    ctx.moveTo(A.x, A.y);
+                    ctx.lineTo(B.x, B.y);
                     ctx.stroke();
 
-                    // Flow point
+                    // flow point
                     const travel = (timeOffset % 1);
-                    const segmentDuration = 0.5;
-                    let t;
-                    if (travel < segmentDuration) t = travel / segmentDuration;
-                    else t = (1 - travel) / segmentDuration;
-                    const flowX = pA.x + (pB.x - pA.x) * t;
-                    const flowY = pA.y + (pB.y - pA.y) * t;
+                    const seg = 0.5;
+                    let t = travel < seg ? travel / seg : (1 - travel) / seg;
+                    const fx = A.x + (B.x - A.x) * t;
+                    const fy = A.y + (B.y - A.y) * t;
                     ctx.beginPath();
-                    ctx.arc(flowX, flowY, 2.5, 0, Math.PI * 2);
+                    ctx.arc(fx, fy, 2.5, 0, Math.PI * 2);
                     ctx.fillStyle = pulseColor;
-                    ctx.shadowBlur = 15;
+                    ctx.shadowBlur = 14;
                     ctx.shadowColor = pulseColor;
                     ctx.fill();
                     ctx.shadowBlur = 0;
@@ -95,245 +142,344 @@
         }
     }
 
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        connectParticles();
-        particles.forEach(p => p.update());
-        requestAnimationFrame(animate);
+    function frame() {
+        ctx.clearRect(0, 0, width, height);
+        connectAndFlow();
+        for (let p of particles) {
+            p.move();
+            p.draw();
+        }
+        requestAnimationFrame(frame);
     }
 
-    initParticles();
-    animate();
     window.addEventListener('resize', () => { initParticles(); });
+    initParticles();
+    frame();
 })();
 
 /* ============================
-   SAUDAÇÃO DO HORÁRIO (com nome "Levi")
+   Page Interactions: DOM Ready
    ============================ */
-(function () {
-    function updateGreeting() {
-        const el = document.getElementById('greeting');
-        if (!el) return;
-        const hour = new Date().getHours();
-        let text = 'Dados acessíveis com segurança.';
-        if (hour >= 5 && hour < 12) text = 'Bom dia. Suas consultas estão prontas.';
-        else if (hour >= 12 && hour < 18) text = 'Boa tarde. Continue avançando.';
-        else text = 'Boa noite. Dados acessíveis com segurança.';
-        // se quiser nome fixo
-        // el.textContent = `${text} — Levi`;
-        el.textContent = text;
-    }
-    updateGreeting();
-    setInterval(updateGreeting, 60 * 1000);
-})();
+document.addEventListener('DOMContentLoaded', () => {
 
-/* ============================
-   MENU MOBILE (corrigido)
-   ============================ */
-(function () {
-    const mobileBtn = document.getElementById('mobile-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const btnOpenLogin = document.getElementById('btn-open-login');
-    const btnOpenLoginMobile = document.getElementById('btn-open-login-mobile');
+    /* -------------------------------
+       Mobile menu open / close
+       ------------------------------- */
+    const mobileBtn = qs('#mobile-btn');
+    const mobileMenu = qs('#mobile-menu');
+    const closeMobile = qs('#close-menu');
 
     if (mobileBtn && mobileMenu) {
         mobileBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
     }
+    if (closeMobile) closeMobile.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    // close on link click
+    qsa('.mobile-link').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
 
-    // abrir login modal se usuário clicar no botão do header
-    if (btnOpenLogin) btnOpenLogin.addEventListener('click', openLoginModal);
-    if (btnOpenLoginMobile) btnOpenLoginMobile.addEventListener('click', openLoginModal);
-})();
+    /* -------------------------------
+       Smooth scroll for header links
+       ------------------------------- */
+    qsa('.nav-link').forEach(a => a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = a.getAttribute('href') || '#';
+        if (href.startsWith('#')) {
+            const target = document.querySelector(href);
+            if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+        }
+    }));
+    qsa('[data-scroll]').forEach(a => a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const selector = a.getAttribute('data-scroll') || a.getAttribute('href');
+        if (!selector) return;
+        const target = document.querySelector(selector);
+        if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+    }));
 
-/* ============================
-   SCROLL SUAVE (para links com data-scroll ou hashes)
-   ============================ */
-(function () {
-    function smoothScrollTo(targetSelector) {
-        const target = document.querySelector(targetSelector);
-        if (!target) return;
-        const top = target.offsetTop - 80;
-        window.scrollTo({ top, behavior: 'smooth' });
-    }
+    /* -------------------------------
+       Modal elements
+       ------------------------------- */
+    const modalPlans = qs('#modal-plans');
+    const modalLogin = qs('#modal-login');
+    const modalTerms = qs('#modal-terms');
 
-    document.querySelectorAll('[data-scroll]').forEach(a => {
-        a.addEventListener('click', (e) => {
+    // open plans buttons (multiple)
+    qsa('[data-open-plans]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
             e.preventDefault();
-            const href = a.getAttribute('data-scroll') || a.getAttribute('href');
-            if (href && href.startsWith('#')) smoothScrollTo(href);
-            // fecha mobile se estiver aberto
-            const mobileMenu = document.getElementById('mobile-menu');
-            if (mobileMenu && !mobileMenu.classList.contains('hidden')) mobileMenu.classList.add('hidden');
+            // If user is logged and clicked Comprar Acesso maybe show plans anyway.
+            showModal(modalPlans);
         });
     });
 
-    // também aplica a links de footer
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', (e) => {
-            // evita duplicar handlers nos que já têm data-scroll
-            if (a.hasAttribute('data-scroll')) return;
+    // close plans
+    qsa('[data-close-plans]').forEach(btn => btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideModal(modalPlans);
+    }));
+
+    // clicking choose plan buttons inside plans modal should open login
+    qsa('#modal-plans [data-open-login]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
             e.preventDefault();
-            const href = a.getAttribute('href');
-            if (href && href.startsWith('#')) smoothScrollTo(href);
+            hideModal(modalPlans);
+            showModal(modalLogin);
         });
     });
-})();
 
-/* ============================
-   LOGIN / MODAL / TERMOS
-   ============================ */
+    // open login generic
+    qsa('[data-open-login]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // If the button is the CTA "Iniciar Análise", handle differently
+            const text = (btn.innerText || '').toLowerCase();
+            const isStartAnalysis = /iniciar análise|iniciar analise|iniciar/i.test(text);
+            if (isStartAnalysis) {
+                if (isLoggedIn()) {
+                    // Simula iniciar análise
+                    alert('Análise iniciada — (simulação). Em produção, redirecione ao painel.');
+                    return;
+                } else {
+                    showModal(modalLogin);
+                    return;
+                }
+            }
+            // otherwise open login modal
+            showModal(modalLogin);
+        });
+    });
 
-/* Helpers */
-function showElement(el) { if (!el) return; el.classList.remove('hidden'); el.style.display = (el.id === 'modal-backdrop') ? 'flex' : ''; }
-function hideElement(el) { if (!el) return; el.classList.add('hidden'); el.style.display = 'none'; }
+    // close login modals
+    qsa('[data-close-login]').forEach(btn => btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideModal(modalLogin);
+    }));
 
-const WHATSAPP_URL = 'https://wa.me/5544999119849';
+    // open terms from inside login
+    qsa('[data-open-terms]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideModal(modalLogin);
+            fillTermsContent(); // ensure content exists
+            showModal(modalTerms);
+        });
+    });
 
-function openLoginModal() {
-    const backdrop = document.getElementById('modal-backdrop');
-    showElement(backdrop);
-    // foco no usuário
-    setTimeout(() => {
-        const user = document.getElementById('login-user');
-        if (user) user.focus();
-    }, 120);
-}
-
-function closeLoginModal() {
-    const backdrop = document.getElementById('modal-backdrop');
-    hideElement(backdrop);
-    // limpa erro
-    const err = document.getElementById('login-error');
-    if (err) { err.classList.add('hidden'); err.textContent = ''; }
-}
-
-/* open terms modal and populate legal text */
-function openTermsModal() {
-    const termsBackdrop = document.getElementById('terms-backdrop');
-    const content = document.getElementById('terms-content');
-    if (!content) return;
-
-    // Conteúdo jurídico elaborado — você pode editar este template conforme necessário
-    content.innerHTML = `
-    <h3>1. OBJETO</h3>
-    <p>Estes Termos de Uso disciplinam o acesso e a utilização dos serviços oferecidos pela 4Track, incluindo, mas não se limitando a, módulos de consulta analítica, painéis de auditoria e interfaces associadas (doravante "Serviço" ou "Serviços").</p>
-
-    <h3>2. ACEITAÇÃO E ADESÃO</h3>
-    <p>Ao realizar o cadastro ou efetuar login, o usuário declara ter lido, compreendido e aceitado integralmente estes Termos, a Política de Privacidade e demais normas aplicáveis. A utilização dos Serviços pressupõe o aceite expresso.</p>
-
-    <h3>3. TRATAMENTO DE DADOS PESSOAIS</h3>
-    <p>A 4Track tratará dados pessoais de acordo com a legislação aplicável, em especial a Lei Geral de Proteção de Dados – LGPD (Lei nº 13.709/2018), resguardando princípios de finalidade, necessidade, adequação, transparência e segurança no tratamento. O usuário consente no tratamento de dados para fins operacionais e legais, inclusive para manutenção de registros de conexão e logs, quando necessário para cumprimento de determinação legal ou requisição judicial.</p>
-
-    <h3>4. PROIBIÇÕES E SEGURANÇA</h3>
-    <p>É vedado ao usuário: (i) acessar, invadir ou tentar invadir dispositivos, contas ou áreas restritas; (ii) utilizar ferramentas de scraping, automação ou quaisquer meios que causem sobrecarga; (iii) compartilhar credenciais; (iv) usar o Serviço para práticas ilícitas; (v) divulgar conteúdo que viole direitos de terceiros. A prática de condutas que configurem crime eletrônico, nos termos do Código Penal e legislação correlata (incluindo Lei nº 12.737/2012 — "Lei Carolina Dieckmann"), sujeitará o autor às medidas civis, administrativas e penais cabíveis.</p>
-
-    <h3>5. RESPONSABILIDADES E LOGS</h3>
-    <p>O usuário reconhece e concorda que a 4Track mantém registros (logs) de acesso, operação e transações, que poderão ser preservados para fins de auditoria e para atender a ordens judiciais ou investigações oficiais. Esses registros poderão ser utilizados em processos administrativos, civis ou criminais no caso de uso indevido ou violação destes Termos (inclusive vazamento de credenciais, tentativas de intrusão, fraudes, e outros incidentes de segurança).</p>
-
-    <h3>6. MEDIDAS EM CASO DE VAZAMENTO OU USO INDEVIDO</h3>
-    <p>Em caso de comprovação de vazamento de credenciais, uso indevido da conta, comportamento que constitua risco à segurança, ou infração a estes Termos, a 4Track reserva-se o direito de: (i) suspender temporariamente o acesso; (ii) encerrar a conta; (iii) revogar chaves de acesso; (iv) colaborar com autoridades competentes para apuração dos fatos; (v) adotar medidas técnicas para mitigar danos.</p>
-
-    <h3>7. NATUREZA DAS INFORMAÇÕES E LIMITAÇÃO DE RESPONSABILIDADE</h3>
-    <p>As informações fornecidas pelos Serviços são de caráter informativo e auxiliar. A 4Track não garante resultados específicos decorrentes do uso dos Serviços e não se responsabiliza por decisões tomadas com base nas informações apresentadas. Na medida máxima permitida pela lei, excluem-se responsabilidades por danos indiretos, lucros cessantes ou prejuízos causados por terceiros.</p>
-
-    <h3>8. BASES LEGAIS APLICÁVEIS</h3>
-    <p>As partes reconhecem a aplicabilidade, ao caso concreto, das seguintes normas e princípios, entre outros: Marco Civil da Internet (Lei nº 12.965/2014), Lei Geral de Proteção de Dados (Lei nº 13.709/2018) e a Lei nº 12.737/2012 que trata de delitos informáticos. A coleta, armazenamento e eventual disponibilização de registros de conexão observarão o que dispõem essas normas e eventuais determinações judiciais.</p>
-
-    <h3>9. PRAZO E ENCERRAMENTO</h3>
-    <p>Estes Termos permanecem em vigor enquanto a conta estiver ativa ou até seu cancelamento. A 4Track pode, a qualquer tempo, alterar estes Termos, mediante comunicação ao usuário ou atualização na plataforma. A violação material destes termos poderá ensejar encerramento imediato da conta, sem prejuízo da adoção de medidas legais cabíveis.</p>
-
-    <h3>10. DISPOSIÇÕES FINAIS</h3>
-    <p>Fica eleito o foro competente para dirimir quaisquer controvérsias oriundas destes Termos, ressalvados os direitos legais imperativos. A eventual invalidade de qualquer cláusula não afetará a validade das demais disposições.</p>
-
-    <hr>
-    <p class="text-xs text-gray-400">Referências legais citadas: Marco Civil da Internet (Lei nº 12.965/2014), Lei Geral de Proteção de Dados – LGPD (Lei nº 13.709/2018), Lei nº 12.737/2012 e demais legislação aplicável.</p>
-    `;
-
-    showElement(termsBackdrop);
-}
-
-function closeTermsModal() {
-    const termsBackdrop = document.getElementById('terms-backdrop');
-    hideElement(termsBackdrop);
-}
-
-/* DOM bindings */
-(function () {
-    // Login modal openers/closers
-    const openBtns = [document.getElementById('btn-open-login'), document.getElementById('btn-open-login-mobile')];
-    const modalBackdrop = document.getElementById('modal-backdrop');
-    const modalClose = document.getElementById('modal-close');
-
-    if (modalBackdrop) {
-        modalBackdrop.addEventListener('click', (e) => {
-            if (e.target === modalBackdrop) closeLoginModal();
+    // open terms global (if footer link present)
+    const footerTermsLink = qs('footer .footer-links a');
+    if (footerTermsLink) {
+        footerTermsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            fillTermsContent();
+            showModal(modalTerms);
         });
     }
-    if (modalClose) modalClose.addEventListener('click', closeLoginModal);
 
-    // Terms modal open/close
-    const linkTerms = document.getElementById('link-terms');
-    const openTermsInline = document.getElementById('open-terms-inline');
-    const termsClose = document.getElementById('terms-close');
+    // close terms
+    qsa('[data-close-terms]').forEach(btn => btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideModal(modalTerms);
+    }));
 
-    if (linkTerms) linkTerms.addEventListener('click', (e) => { e.preventDefault(); openTermsModal(); });
-    if (openTermsInline) openTermsInline.addEventListener('click', (e) => { e.preventDefault(); openTermsModal(); });
-    if (termsClose) termsClose.addEventListener('click', closeTermsModal);
-
-    const termsBackdrop = document.getElementById('terms-backdrop');
-    if (termsBackdrop) termsBackdrop.addEventListener('click', (e) => {
-        if (e.target === termsBackdrop) closeTermsModal();
+    // backdrop close: if click in modal area outside content (modal has class modal and modal-content inside)
+    qsa('.modal').forEach(modal => {
+        modal.addEventListener('click', (ev) => {
+            // if clicked the modal container itself (not the inner modal-content)
+            if (ev.target === modal) {
+                hideModal(modal);
+            }
+        });
     });
 
-    // Login form submit
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = document.getElementById('login-user').value.trim();
-            const pass = document.getElementById('login-pass').value;
-            const consent = document.getElementById('login-consent').checked;
-            const err = document.getElementById('login-error');
+    // Escape closes any modal
+    document.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Escape') {
+            [modalPlans, modalLogin, modalTerms].forEach(m => { if (m) hideModal(m); });
+        }
+    });
 
-            if (!consent) {
-                if (err) { err.textContent = 'Você precisa aceitar os Termos de Uso para prosseguir.'; err.classList.remove('hidden'); }
+    /* -------------------------------
+       LOGIN FORM - validation & flow
+       ------------------------------- */
+    // We'll create a simple error container inside the login modal if not present.
+    function ensureLoginErrorEl() {
+        if (!modalLogin) return null;
+        let err = qs('.login-error', modalLogin);
+        if (!err) {
+            err = document.createElement('div');
+            err.className = 'login-error';
+            err.style.color = '#ff8b8b';
+            err.style.fontSize = '0.95rem';
+            err.style.marginTop = '8px';
+            modalLogin.querySelector('.modal-content').appendChild(err);
+        }
+        return err;
+    }
+
+    // Find inputs & consent
+    const inputUser = modalLogin ? modalLogin.querySelector('input[type="text"]') : null;
+    const inputPass = modalLogin ? modalLogin.querySelector('input[type="password"]') : null;
+    const consentCheckbox = modalLogin ? modalLogin.querySelector('input[type="checkbox"]') : null;
+    const loginButton = modalLogin ? modalLogin.querySelector('.btn-premium') : null;
+
+    // Attach forgot / signup redirection (buttons in HTML point to WA but enforce here)
+    qsa('#modal-login [onclick], #modal-login a').forEach(el => {
+        // keep existing behavior; nothing to do
+    });
+    // Explicitly ensure any 'Esqueci' or 'Criar conta' buttons redirect
+    qsa('#modal-login button').forEach(b => {
+        const txt = (b.innerText || '').toLowerCase();
+        if (txt.includes('esqueci')) b.addEventListener('click', () => { window.open(WHATSAPP_URL, '_blank'); });
+        if (txt.includes('criar conta')) b.addEventListener('click', () => { window.open(WHATSAPP_URL, '_blank'); });
+    });
+
+    // Login submit handler
+    if (loginButton) {
+        loginButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const err = ensureLoginErrorEl();
+            if (!inputUser || !inputPass || !consentCheckbox) {
+                if (err) err.textContent = 'Erro interno: elementos do formulário não encontrados.';
+                return;
+            }
+            const u = inputUser.value.trim();
+            const p = inputPass.value;
+            const accepted = consentCheckbox.checked;
+
+            if (!accepted) {
+                if (err) err.textContent = 'Você deve aceitar os Termos de Uso para prosseguir.';
+                return;
+            }
+            if (u.length < 3 || p.length < 4) {
+                if (err) err.textContent = 'Usuário ou senha inválidos (min. 3 chars user, 4 chars senha).';
                 return;
             }
 
-            // Simulação de login: aqui você deve trocar para chamada real ao seu backend.
-            if (user.length >= 3 && pass.length >= 4) {
-                // Login bem-sucedido: fechar modal e simular redirecionamento
-                closeLoginModal();
-                alert('Login efetuado (simulação). Em produção, autentique via servidor seguro.');
-                // Aqui você pode redirecionar: window.location.href = '/dashboard';
-            } else {
-                if (err) { err.textContent = 'Usuário ou senha inválidos (simulação).'; err.classList.remove('hidden'); }
-            }
+            // Simulated "authentication"
+            setLoggedIn(true);
+            hideModal(modalLogin);
+            if (err) err.textContent = '';
+            // Visual feedback
+            const successMsg = document.createElement('div');
+            successMsg.className = 'login-success';
+            successMsg.textContent = 'Login efetuado com sucesso (simulação).';
+            successMsg.style.color = '#cbe7c7';
+            successMsg.style.marginTop = '10px';
+            modalLogin.querySelector('.modal-content').appendChild(successMsg);
+            setTimeout(() => { if (successMsg) successMsg.remove(); }, 1800);
+
+            // In production: redirect to dashboard
+            // window.location.href = '/dashboard';
         });
     }
 
-    // Links "Esqueci a senha" / "Criar conta" — já apontam para WhatsApp no HTML, mas se quiser reforçar:
-    const forgotLink = document.getElementById('forgot-link');
-    const signupLink = document.getElementById('signup-link');
-    if (forgotLink) forgotLink.setAttribute('href', WHATSAPP_URL);
-    if (signupLink) signupLink.setAttribute('href', WHATSAPP_URL);
+    /* -------------------------------
+       Buttons: Iniciar Análise behavior
+       ------------------------------- */
+    // Detect CTA button by icon text or class - check all premium buttons and match innerText
+    qsa('.btn-premium').forEach(b => {
+        const txt = (b.innerText || '').toLowerCase();
+        if (txt.includes('iniciar análise') || txt.includes('iniciar analise')) {
+            b.addEventListener('click', (ev) => {
+                ev.preventDefault();
+                if (isLoggedIn()) {
+                    alert('Iniciando análise... (simulação). Você está logado.');
+                    // redirect to analysis page in production
+                } else {
+                    showModal(modalLogin);
+                }
+            });
+        }
+    });
 
-    // botão de abrir login no header mobile (caso exista)
-    const btnOpenMobile = document.getElementById('btn-open-login-mobile');
-    if (btnOpenMobile) btnOpenMobile.addEventListener('click', openLoginModal);
-})();
+    /* -------------------------------
+       Terms content filler
+       ------------------------------- */
+    function fillTermsContent() {
+        // If modalTerms exists, fill with a detailed legal text (rich)
+        if (!modalTerms) return;
+        const contentWrapper = modalTerms.querySelector('.terms-box') || modalTerms.querySelector('.modal-content');
+        if (!contentWrapper) return;
 
-/* ============================
-   DEPOIS: IntersectionObserver para revelar seções
-   ============================ */
-(function () {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('fade-in');
+        // Avoid refilling every time
+        if (contentWrapper.getAttribute('data-filled') === '1') {
+            showModal(modalTerms);
+            return;
+        }
+
+        const longLegal = `
+            <h3>1. OBJETO</h3>
+            <p>Estes Termos disciplinam o uso da plataforma 4Track, bem como dos módulos, APIs e interfaces correlatas. O usuário declara ter ciência de suas obrigações e limitações ao utilizar os serviços.</p>
+
+            <h3>2. ACEITAÇÃO</h3>
+            <p>Ao realizar login ou cadastro, o usuário aceita integralmente estes Termos e a Política de Privacidade. O uso contínuo configura aceite.</p>
+
+            <h3>3. TRATAMENTO DE DADOS</h3>
+            <p>A 4Track observará a Lei nº 13.709/2018 (LGPD) e demais normas aplicáveis. Dados pessoais poderão ser processados para execução do serviço, prevenção a fraudes e atendimento a solicitações legais.</p>
+
+            <h3>4. REGISTROS E LOGS</h3>
+            <p>A plataforma mantém logs de acesso, IP, timestamps e ações internas, que serão preservados para fins de auditoria e para atender requisições judiciais ou investigações oficiais.</p>
+
+            <h3>5. VAZAMENTO E MEDIDAS</h3>
+            <p>Em caso de comprovação de vazamento de credenciais, uso indevido, violação dos Termos ou incidentes de segurança, a 4Track poderá, a seu critério, suspender, bloquear ou excluir contas, além de comunicar autoridades. Outros problemas que ensejam essas medidas incluem: tentativa de intrusão, distribuição não autorizada de dados, uso para fins criminosos, scraping massivo e engenharia reversa.</p>
+
+            <h3>6. PROIBIÇÕES</h3>
+            <p>É terminantemente proibido: (i) compartilhar credenciais; (ii) realizar scraping ou automação sem autorização; (iii) usar o sistema para perseguição, chantagem, fraude, golpes ou qualquer conduta ilícita; (iv) tentar reproduzir ou distribuir componentes protegidos.</p>
+
+            <h3>7. FUNDAMENTOS LEGAIS</h3>
+            <p>As medidas acima encontram suporte no Marco Civil da Internet (Lei nº 12.965/2014), na LGPD (Lei nº 13.709/2018) e na Lei nº 12.737/2012 (delitos informáticos). Além disso, condutas que configurem crime estão sujeitas ao Código Penal (arts. pertinentes) e outras normas aplicáveis.</p>
+
+            <h3>8. RESPONSABILIDADE</h3>
+            <p>A 4Track não assume responsabilidade por decisões tomadas com base nas informações fornecidas. Exclui-se, na máxima extensão permitida por lei, responsabilidade por danos indiretos, lucros cessantes ou prejuízos de terceiros.</p>
+
+            <h3>9. ENCERRAMENTO</h3>
+            <p>O descumprimento destes Termos poderá resultar em medidas imediatas, incluindo exclusão de conta, bloqueio de acesso e eventual remessa de logs às autoridades competentes.</p>
+
+            <hr>
+            <p style="font-size:0.85rem;color:#cfc9e8">Referências: Lei nº 12.965/2014 (Marco Civil), Lei nº 13.709/2018 (LGPD), Lei nº 12.737/2012.</p>
+        `;
+
+        // place inside .terms-box if exists (HTML structure from index.html has .terms-box)
+        const termsBox = modalTerms.querySelector('.terms-box');
+        if (termsBox) {
+            termsBox.innerHTML = longLegal;
+            termsBox.setAttribute('data-filled', '1');
+        } else {
+            // fallback to modal-content insertion
+            const container = modalTerms.querySelector('.modal-content');
+            if (container) {
+                const el = document.createElement('div');
+                el.innerHTML = longLegal;
+                container.appendChild(el);
+                container.setAttribute('data-filled', '1');
+            }
+        }
+
+        showModal(modalTerms);
+    }
+
+    /* -------------------------------
+       Page: set greeting (time based)
+       ------------------------------- */
+    (function setGreeting() {
+        const el = qs('#greeting');
+        if (!el) return;
+        const h = new Date().getHours();
+        let txt = 'Dados acessíveis com segurança.';
+        if (h >= 5 && h < 12) txt = 'Bom dia. Suas consultas estão prontas.';
+        else if (h >= 12 && h < 18) txt = 'Boa tarde. Continue avançando.';
+        else txt = 'Boa noite. Dados acessíveis com segurança.';
+        el.textContent = txt;
+    })();
+
+    /* -------------------------------
+       Initialize small UI tweaks if logged
+       ------------------------------- */
+    if (isLoggedIn()) {
+        // Example: change Entrar no Sistema -> Minha Conta (if such element exists)
+        qsa('[data-open-login]').forEach(btn => {
+            // if it's in header or hero, keep as "Entrar" but you might show logged state
         });
-    }, { threshold: 0.2 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-})();
+    }
+});
