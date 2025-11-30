@@ -1,139 +1,464 @@
-/* Cores customizadas baseadas na paleta */
+/* ===========================================================
+   BASE / ROOT
+=========================================================== */
+
 :root {
-    --color-tech-black: #0C0C1E; /* Preto Tecnológico */
-    --color-deep-purple: #4A148C; /* Roxo Escuro/Violeta */
-    --color-lilac-soft: #C7A2E8; /* Lilás Suave - o pulso */
-    --color-violet-deep: #6A1B9A; /* Violeta Profundo */
+    --color-bg: #05010b;
+    --color-lilac-soft: #c7a2e8;
+    --color-lilac-strong: #a56efc;
+    --color-lilac-neon: #b280ff;
+    --color-card: rgba(15, 3, 28, 0.7);
+    --color-border: rgba(167, 74, 255, 0.3);
+    --color-glass: rgba(10, 0, 20, 0.45);
+
+    --radius: 14px;
+    --shadow-neon: 0 0 18px rgba(178, 128, 255, 0.4);
 }
 
-body {
+html, body {
+    margin: 0;
+    padding: 0;
     font-family: 'Inter', sans-serif;
-    background-color: var(--color-tech-black);
     color: white;
+    background: var(--color-bg);
     overflow-x: hidden;
 }
 
-/* Estilo da animação de fundo - Tela cheia e fixa */
+.bg-tech-black {
+    background: var(--color-bg);
+}
+
+/* canvas */
 #data-network {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+
+/* ===========================================================
+   HEADER / MENU
+=========================================================== */
+
+.glass-header {
+    background: var(--color-glass);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.nav-link {
+    color: #cfcfcf;
+    transition: .2s;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover {
+    color: white;
+    border-color: var(--color-lilac-neon);
+}
+
+.mobile-link {
+    display: block;
+    padding: 12px 0;
+    color: #d1cbe1;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.mobile-link:hover {
+    color: white;
+}
+
+
+/* ===========================================================
+   HERO
+=========================================================== */
+
+.greeting-text {
+    font-size: .85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-lilac-soft);
+    text-shadow: 0 0 5px rgba(200, 150, 255, .5);
+}
+
+.hero-title {
+    font-size: clamp(2.7rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.gradient-text {
+    background: linear-gradient(40deg, var(--color-lilac-soft), #fff);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.hero-subtitle {
+    color: #b7b7b7;
+    font-size: 1.2rem;
+}
+
+.hologram-box {
+    border-top: 1px solid var(--color-lilac-neon);
+    border-left: 1px solid var(--color-lilac-neon);
+    border-right: 1px solid var(--color-lilac-neon);
+    background: rgba(120, 20, 255, .07);
+    padding: 40px;
+    border-radius: 30px 30px 0 0;
+    color: #999;
+    font-style: italic;
+}
+
+
+/* ===========================================================
+   BUTTONS
+=========================================================== */
+
+.btn-premium {
+    background: linear-gradient(45deg, #6e1aff, #b57aff);
+    color: white;
+    border-radius: 50px;
+    font-weight: 700;
+    transition: .25s;
+    box-shadow: 0 0 10px rgba(158, 75, 255, 0.4);
+}
+
+.btn-premium:hover {
+    box-shadow: 0 0 25px rgba(165, 80, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    border: 2px solid var(--color-lilac-strong);
+    border-radius: 50px;
+    color: white;
+    transition: .25s;
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-lilac-soft);
+    background: rgba(180, 120, 255, .1);
+}
+
+
+
+/* ===========================================================
+   SECTION TITLES
+=========================================================== */
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+.section-subtitle {
+    color: #bfbfbf;
+    font-size: 1.1rem;
+}
+
+.section-padding {
+    padding: 80px 0;
+}
+
+.section-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-lilac-neon), transparent);
+    margin: 50px 0;
+}
+
+
+
+/* ===========================================================
+   CARDS
+=========================================================== */
+
+.card-module {
+    background: var(--color-card);
+    border: 1px solid rgba(175, 90, 255, 0.15);
+    padding: 30px;
+    border-radius: var(--radius);
+    transition: .3s;
+}
+
+.card-module:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-neon);
+}
+
+.card-module.disabled {
+    opacity: .4;
+}
+
+.icon-lilac {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #220033, #5a0ea5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-lilac-soft);
+    font-size: 1.3rem;
+    margin: 0 auto 15px auto;
+}
+
+.tag {
+    background: rgba(165, 100, 255, .3);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: .7rem;
     position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+
+/* ===========================================================
+   TESTIMONIALS
+=========================================================== */
+
+.testimonial {
+    background: var(--color-card);
+    border: 1px solid rgba(165, 80, 255, .2);
+    border-top: 4px solid var(--color-lilac-neon);
+    padding: 25px;
+    border-radius: var(--radius);
+}
+
+.testimonial-user {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.testimonial-user img {
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    margin-right: 15px;
+}
+
+
+
+/* ===========================================================
+   FOOTER
+=========================================================== */
+
+.footer {
+    background: rgba(0, 0, 0, .4);
+    border-top: 1px solid var(--color-border);
+    padding: 40px 0;
+}
+
+.footer-logo {
+    font-size: 2rem;
+    color: var(--color-lilac-soft);
+    font-weight: 800;
+}
+
+.footer-logo span {
+    color: white;
+}
+
+.footer-links a {
+    margin: 0 10px;
+    color: #c5c5d1;
+}
+
+.footer-links a:hover {
+    color: white;
+}
+
+
+
+/* ===========================================================
+   MODALS (BASE)
+=========================================================== */
+
+.modal {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
-    z-index: 1; /* Abaixo do conteúdo principal */
-    opacity: 0.6; /* Sutil */
-}
-
-/* Container principal para sobrepor a animação */
-.hero-content {
-    position: relative;
-    z-index: 10;
-    padding-top: 6rem; /* Espaço para o header */
-}
-
-/* Efeito de Vidro Fosco (Glassmorphism) para o Header */
-.glass-header {
-    backdrop-filter: blur(10px) saturate(180%);
-    background-color: rgba(12, 12, 30, 0.7); /* tech-black com transparência */
-}
-
-/* Estilo para botões premium */
-.btn-premium {
-    background: linear-gradient(90deg, var(--color-violet-deep), var(--color-deep-purple));
-    box-shadow: 0 4px 15px rgba(199, 162, 232, 0.4);
-    transition: all 0.3s ease;
-}
-.btn-premium:hover {
-    opacity: 0.9;
-    box-shadow: 0 6px 20px rgba(199, 162, 232, 0.6);
-}
-
-/* Estilo do card premium com borda sutil */
-.card-module {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(199, 162, 232, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.card-module:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(199, 162, 232, 0.15);
-}
-
-/* Estilo para o ícone de linha fina (lilás) */
-.icon-lilac {
-    color: var(--color-lilac-soft);
-    border: 2px solid var(--color-lilac-soft);
-    display: inline-flex;
+    height: 100%;
+    background: rgba(5, 0, 15, .85);
+    backdrop-filter: blur(8px);
+    display: flex;
     align-items: center;
     justify-content: center;
+    padding: 25px;
+    z-index: 9999;
 }
 
-/* Estilo para o separador de seção (minimalista) */
-.section-divider {
-    height: 1px;
-    background: linear-gradient(90deg, rgba(74, 20, 140, 0) 0%, var(--color-deep-purple) 50%, rgba(74, 20, 140, 0) 100%);
-    opacity: 0.4;
-}
-
-/* =========================
-   Novos estilos: Modals & Form
-   ========================= */
-
-/* Modal backdrop (flex container) */
-#modal-backdrop {
+.modal.hidden {
     display: none;
 }
-#modal-backdrop.flex { display:flex; }
 
-/* Terms backdrop */
-#terms-backdrop { display: none; }
-#terms-backdrop.flex { display:flex; }
+.modal-content {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 40px;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: var(--shadow-neon);
+    position: relative;
+    animation: fadeUp .4s ease;
+}
 
-/* Inputs */
-input[type="text"], input[type="password"], textarea {
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-close {
+    color: var(--color-lilac-soft);
+    position: absolute;
+    right: 18px;
+    top: 14px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.modal-close:hover {
+    color: #fff;
+}
+
+
+
+/* ===========================================================
+   MODAL: PLANOS
+=========================================================== */
+
+.plans-modal {
+    max-width: 900px;
+}
+
+.plan-card {
+    background: rgba(20, 0, 40, .6);
+    padding: 25px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(160, 70, 255, .2);
+    text-align: center;
+    transition: .3s;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-neon);
+}
+
+.plan-card .price {
+    font-size: 1.6rem;
+    margin: 12px 0 18px;
+    font-weight: 700;
+}
+
+.plan-card.highlight {
+    background: rgba(50, 0, 90, .9);
+    border-color: var(--color-lilac-soft);
+    box-shadow: 0 0 25px rgba(165, 80, 255, .5);
+}
+
+
+
+/* ===========================================================
+   MODAL: LOGIN
+=========================================================== */
+
+.login-modal input {
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    background: rgba(15, 0, 30, .5);
     color: white;
-    background: transparent;
-    border-radius: 8px;
-    border: 1px solid rgba(114, 36, 135, 0.35);
+    outline: none;
+    transition: .2s;
 }
 
-/* Scrollbar personalizado leve para modals (suave) */
-#terms-backdrop .prose::-webkit-scrollbar {
-    width: 10px;
-}
-#terms-backdrop .prose::-webkit-scrollbar-thumb {
-    background: rgba(106, 27, 154, 0.4);
-    border-radius: 8px;
+.input:focus {
+    border-color: var(--color-lilac-neon);
+    box-shadow: 0 0 8px rgba(165, 80, 255, .4);
 }
 
-/* Estilo do link de termos (inline) */
-#open-terms-inline {
+
+
+/* checkbox */
+
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: .9rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.checkbox-container input {
+    transform: scale(1.2);
+    accent-color: var(--color-lilac-neon);
+}
+
+.checkbox-container .link {
     color: var(--color-lilac-soft);
     text-decoration: underline;
 }
 
-/* Mensagem de erro */
-#login-error {
-    color: #ff7b7b;
+
+
+/* ===========================================================
+   MODAL: TERMOS
+=========================================================== */
+
+.terms-modal {
+    max-width: 900px;
 }
 
-/* Classes utilitárias */
-.hidden { display: none !important; }
-
-/* animação simples fade-in usada por observer */
-.fade-in {
-    transform: translateY(0);
-    opacity: 1;
-    transition: opacity 700ms ease, transform 700ms ease;
+.terms-box {
+    background: rgba(10, 0, 20, .5);
+    border: 1px solid rgba(165, 80, 255, .2);
+    padding: 20px;
+    border-radius: var(--radius);
+    height: 400px;
+    overflow-y: auto;
+    color: #d5cdea;
+    font-size: .96rem;
+    line-height: 1.55;
 }
 
-/* inicialmente seções com reveal estarão deslocadas */
+.terms-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.terms-box::-webkit-scrollbar-thumb {
+    background: var(--color-lilac-neon);
+    border-radius: 10px;
+}
+
+
+
+/* ===========================================================
+   ANIMAÇÕES / REVEAL
+=========================================================== */
+
 .reveal {
-    transform: translateY(10px);
     opacity: 0;
+    transform: translateY(20px);
+    transition: .6s;
 }
 
-/* Responsividade do modal */
-@media (max-width: 640px) {
-    #modal-backdrop > div { margin: 0 12px; width: calc(100% - 24px); }
+.reveal.fade-in {
+    opacity: 1;
+    transform: translateY(0);
 }
