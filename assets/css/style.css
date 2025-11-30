@@ -1,0 +1,78 @@
+/* Cores customizadas baseadas na paleta */
+:root {
+    --color-tech-black: #0C0C1E; /* Preto Tecnológico */
+    --color-deep-purple: #4A148C; /* Roxo Escuro/Violeta */
+    --color-lilac-soft: #C7A2E8; /* Lilás Suave - o pulso */
+    --color-violet-deep: #6A1B9A; /* Violeta Profundo */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-tech-black);
+    color: white;
+    overflow-x: hidden;
+}
+
+/* Estilo da animação de fundo - Tela cheia e fixa */
+#data-network {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1; /* Abaixo do conteúdo principal */
+    opacity: 0.6; /* Sutil */
+}
+
+/* Container principal para sobrepor a animação */
+.hero-content {
+    position: relative;
+    z-index: 10;
+    padding-top: 6rem; /* Espaço para o header */
+}
+
+/* Efeito de Vidro Fosco (Glassmorphism) para o Header */
+.glass-header {
+    backdrop-filter: blur(10px) saturate(180%);
+    background-color: rgba(12, 12, 30, 0.7); /* tech-black com transparência */
+}
+
+/* Estilo para botões premium */
+.btn-premium {
+    background: linear-gradient(90deg, var(--color-violet-deep), var(--color-deep-purple));
+    box-shadow: 0 4px 15px rgba(199, 162, 232, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-premium:hover {
+    opacity: 0.9;
+    box-shadow: 0 6px 20px rgba(199, 162, 232, 0.6);
+}
+
+/* Estilo do card premium com borda sutil */
+.card-module {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(199, 162, 232, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-module:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(199, 162, 232, 0.15);
+}
+
+/* Estilo para o ícone de linha fina (lilás) */
+.icon-lilac {
+    color: var(--color-lilac-soft);
+    border: 2px solid var(--color-lilac-soft);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilo para o separador de seção (minimalista) */
+.section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(74, 20, 140, 0) 0%, var(--color-deep-purple) 50%, rgba(74, 20, 140, 0) 100%);
+    opacity: 0.4;
+}
